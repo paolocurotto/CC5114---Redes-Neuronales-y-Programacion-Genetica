@@ -15,7 +15,6 @@ public class PerceptronBitAdder {
         int p3val = p3.eval(p1val, x2);
         int p4val = p4.eval(p1val, p1val);
         int p5val = p5.eval(p2val, p3val);
-
         sum = p5val;
         carry = p4val;
     }
