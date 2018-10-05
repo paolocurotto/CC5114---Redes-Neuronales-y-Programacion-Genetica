@@ -1,7 +1,7 @@
 public class PerceptronAND extends Perceptron {
 
     public PerceptronAND() {
-        super(new int[] {2, 2}, 3);
+        super(new double[] {2, 2}, 3);
     }
 
     public int eval(int x1, int x2) {
