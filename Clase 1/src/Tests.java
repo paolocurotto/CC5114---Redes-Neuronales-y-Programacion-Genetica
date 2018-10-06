@@ -1,5 +1,7 @@
 import org.junit.Test;
 
+import java.lang.annotation.Annotation;
+
 import static junit.framework.TestCase.assertEquals;
 
 public class Tests {
@@ -55,4 +57,5 @@ public class Tests {
         assertEquals(0, adder.getSum());
         assertEquals(1, adder.getCarry());
     }
+
 }
