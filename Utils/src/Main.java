@@ -14,21 +14,17 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Graph g = new Graph();
+        NetworkPane p = new NetworkPane();
+        //Pane s = p.getPane();
 
-        Pane d = g.getGraph();
+        Pane s = p.getLayersPane();
 
-        Scene scene = new Scene(d, Color.WHITESMOKE);
+        s.setPrefSize(500, 400);
+
+
+        Scene scene = new Scene(s, Color.WHITESMOKE);
         stage.setTitle("Neural Network");
         stage.setScene(scene);
         stage.show();
-
-
-        g.setXrange(10);
-        g.setYrange(1);
-
-        g.drawPoint(2, 0.5);
-        g.drawPoint(7, 0.1);
-        g.drawPoint(10, 0);
     }
 }

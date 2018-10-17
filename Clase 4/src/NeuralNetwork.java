@@ -42,12 +42,40 @@ public class NeuralNetwork {
 
         double output = neuralLayers.get(neuralLayers.size() - 1).getNeurons().get(0).getOutput();
 
-        //System.out.println("Neural network output= " + output);
-        if (output < 0.5) {
-            output = 0;
-        } else {
-            output = 1;
-        }
         return output;
+    }
+
+    public void showWeights1() {
+
+        NeuronLayer layer1 = neuralLayers.get(0);
+        int i = 0;
+        System.out.println("");
+        for (SigmoidNeuron neuron : layer1.getNeurons()) {
+            System.out.print("neuron " + i + " : [");
+
+            for (double weight : neuron.getWeights()) {
+                System.out.print(weight + ", ");
+
+            }
+            i++;
+            System.out.println("]");
+        }
+    }
+
+    public void showWeights2() {
+
+        NeuronLayer layer1 = neuralLayers.get(1);
+        int i = 0;
+        System.out.println("");
+        for (SigmoidNeuron neuron : layer1.getNeurons()) {
+            System.out.print("neuron " + i + " : [");
+
+            for (double weight : neuron.getWeights()) {
+                System.out.print(weight + ", ");
+
+            }
+            i++;
+            System.out.println("]");
+        }
     }
 }

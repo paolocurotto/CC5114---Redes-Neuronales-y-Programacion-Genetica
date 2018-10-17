@@ -89,20 +89,18 @@ public class NeuronLayer {
 
     public void updateWeights(ArrayList<Double> inputs) {
 
-        double new_weight;
-        double new_bias;
-
         // Update weights and bias for each neuron in the layer
         for (SigmoidNeuron neuron : neurons) {
 
             // Update each weight
-            for (int n = 0; n < inputs.size(); n++) {
-                new_weight = neuron.getWeights().get(n) + (neuron.learningRate * neuron.getDelta() * inputs.get(n));
+            for (int n = 0; n < neuron.getWeights().size(); n++) {
+                double old_weight = neuron.getWeights().get(n);
+                double new_weight = old_weight + (neuron.learningRate * neuron.getDelta() * inputs.get(n));
                 neuron.setWeight(n, new_weight);
             }
 
             // Update bias
-            new_bias = neuron.getBias() + (neuron.learningRate * neuron.getDelta());
+            double new_bias = neuron.getBias() + (neuron.learningRate * neuron.getDelta());
             neuron.setBias(new_bias);
         }
 
@@ -115,9 +113,10 @@ public class NeuronLayer {
 
     private ArrayList<Double> getOutputs() {
         ArrayList<Double> o = new ArrayList<>();
-        for (SigmoidNeuron n : neurons)
+        for (SigmoidNeuron n : neurons) {
             o.add(n.getOutput());
-        return  o;
+        }
+        return o;
     }
 
     public ArrayList<SigmoidNeuron> getNeurons() { return neurons; }

@@ -36,8 +36,10 @@ public class SigmoidNeuron {
 
         z = z - threshold;
 
-        double sigmoid = (double) 1 / (1 + Math.exp(-z));
-        output = sigmoid;
+        double sigmoid = (double) 1 / (1 + Math.exp(z*-1));
+
+        setOutput(sigmoid);
+
         return sigmoid;
     }
 
