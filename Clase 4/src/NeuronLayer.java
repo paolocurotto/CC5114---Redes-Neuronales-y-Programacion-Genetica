@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class NeuronLayer {
 
-    public ArrayList<SigmoidNeuron> neurons;
+    private ArrayList<SigmoidNeuron> neurons = new ArrayList<>();
     private NeuronLayer previousLayer;
     private NeuronLayer nextLayer;
 
 
     public NeuronLayer(int n_neurons, int n_weights_per_neuron) {
-        neurons = new ArrayList<>();
+
         for (int n = 0; n < n_neurons; n++) {
             neurons.add(new SigmoidNeuron(n_weights_per_neuron));
         }
@@ -31,19 +31,15 @@ public class NeuronLayer {
     // Backward propagation in output layer
     public void backwardPropagate(ArrayList<Double> expectedOutput) {
 
-        double error;
-        double delta;
-        double output;
-
         // Check sizes
         if (neurons.size() != expectedOutput.size())
             System.err.println("n output neurons="+neurons.size() + " != n desiredoutput="+ expectedOutput.size());
 
         // Set delta for each output neuron
         for (int n = 0; n < neurons.size(); n++) {
-            output = neurons.get(n).getOutput();
-            error = expectedOutput.get(n) - output;
-            delta = error * output * (1 - output);
+            double output = neurons.get(n).getOutput();
+            double error = expectedOutput.get(n) - output;
+            double delta = error * output * (1 - output);
             neurons.get(n).setDelta(delta);
         }
 
@@ -54,28 +50,22 @@ public class NeuronLayer {
     }
 
     // Backward propagation in hidden layers
-    public void backwardPropagateError() {
-
-        ArrayList<SigmoidNeuron> nextNeurons = nextLayer.getNeurons();
-        SigmoidNeuron currentNeuron;
-        double error;
-        double delta;
-        double output;
+    private void backwardPropagateError() {
 
         // Calculate delta for each neuron in this layer
         for (int n = 0; n < neurons.size(); n++) {
 
-            currentNeuron = neurons.get(n);
-            output = currentNeuron.getOutput();
+            SigmoidNeuron currentNeuron = neurons.get(n);
+            double output = currentNeuron.getOutput();
 
             // Calculate error
-            error = 0;
-            for (SigmoidNeuron nextNeuron : nextNeurons) {
-                error += nextNeuron.getWeights().get(n) * nextNeuron.getDelta();
+            double error = 0;
+            for (SigmoidNeuron nextNeuron : nextLayer.getNeurons()) {
+                error += nextNeuron.getWeights()[n] * nextNeuron.getDelta();
             }
 
             // Calculate delta
-            delta = error * output * (1 - output);
+            double delta = error * output * (1 - output);
             currentNeuron.setDelta(delta);
 
         }
@@ -92,16 +82,17 @@ public class NeuronLayer {
         // Update weights and bias for each neuron in the layer
         for (SigmoidNeuron neuron : neurons) {
 
+            // Check sizes
+            if (neuron.getWeights().length != inputs.size())
+                System.err.println("n weights neuron="+neuron.getWeights().length + " != n inputs="+ inputs.size());
+
             // Update each weight
-            for (int n = 0; n < neuron.getWeights().size(); n++) {
-                double old_weight = neuron.getWeights().get(n);
-                double new_weight = old_weight + (neuron.learningRate * neuron.getDelta() * inputs.get(n));
-                neuron.setWeight(n, new_weight);
+            for (int n = 0; n < neuron.getWeights().length; n++) {
+                neuron.getWeights()[n] = neuron.getWeights()[n] + (neuron.getLearningRate() * neuron.getDelta() * inputs.get(n));
             }
 
             // Update bias
-            double new_bias = neuron.getBias() + (neuron.learningRate * neuron.getDelta());
-            neuron.setBias(new_bias);
+            neuron.setBias(neuron.getBias() + (neuron.getLearningRate() * neuron.getDelta()));
         }
 
         // Continue weights update on next layer

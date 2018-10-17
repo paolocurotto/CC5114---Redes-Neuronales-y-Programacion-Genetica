@@ -3,8 +3,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SigmoidNeuron {
 
-    public double learningRate = 0.5;
-    private ArrayList<Double> weights;
+    private double learningRate = 0.08;
+    private double[] weights;
     private double threshold;
     private double delta;
     private double output;
@@ -12,39 +12,44 @@ public class SigmoidNeuron {
 
     public SigmoidNeuron(int n_of_weights) {
 
-        weights = new ArrayList<>();
+        weights = new double[n_of_weights];
 
         // Set random weights
         for (int n = 0; n < n_of_weights; n++) {
-            weights.add(ThreadLocalRandom.current().nextDouble(-0.2, 0.2));
+            //weights.add(ThreadLocalRandom.current().nextDouble(-0.3, 0.3));
+            weights[n] = ThreadLocalRandom.current().nextDouble(-0.2, 0.2);
         }
 
-        // Set random threshhold
+        // Set random threshold
         threshold =  ThreadLocalRandom.current().nextDouble(-0.2, 0.2);
     }
 
     public double feed(ArrayList<Double> inputs) {
 
         // Check sizes
-        if (inputs.size() != weights.size())
-            System.err.println("n inputs "+inputs.size()+" != n weights " + weights.size());
+        if (inputs.size() != weights.length)
+            System.err.println("n inputs "+inputs.size()+" != n weights " + weights.length);
 
         double z = 0;
         for (int i = 0; i < inputs.size(); i++) {
-            z = z + (inputs.get(i) * weights.get(i));
+            z = z + (inputs.get(i) * weights[i]);
         }
 
         z = z - threshold;
 
-        double sigmoid = (double) 1 / (1 + Math.exp(z*-1));
+        double sigmoid = (double) 1 / (1 + Math.exp(-z));
+
+        if (sigmoid <= 0 || 1 <= sigmoid)
+            System.err.println("sigmoid wrong value");
+
 
         setOutput(sigmoid);
 
         return sigmoid;
     }
 
-    public ArrayList<Double> getWeights() { return weights; }
-    public void setWeight(int index, double value) {weights.set(index, value); }
+    public double[] getWeights() { return weights; }
+    public double getLearningRate() { return  learningRate; }
     public double getOutput() { return output; }
     public void setOutput(double o) { this.output = o; }
     public double getDelta() { return  delta; }

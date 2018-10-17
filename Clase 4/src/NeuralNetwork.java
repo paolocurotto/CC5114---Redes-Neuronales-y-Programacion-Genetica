@@ -4,11 +4,9 @@ import java.util.ArrayList;
 
 public class NeuralNetwork {
 
-    private ArrayList<NeuronLayer> neuralLayers;
+    private ArrayList<NeuronLayer> neuralLayers = new ArrayList<>();
 
     public NeuralNetwork(int[] layers) {
-
-        neuralLayers = new ArrayList<>();
 
         // layers[0] -> number of inputs
         // layers[1 .. n] -> number of neurons of layer n
@@ -16,8 +14,9 @@ public class NeuralNetwork {
 
             neuralLayers.add(new NeuronLayer(layers[n], layers[n - 1]));
 
-            if (neuralLayers.size() < 2)
+            if (neuralLayers.size() < 2) {
                 continue;
+            }
 
             neuralLayers.get(n - 2).setNextLayer(neuralLayers.get(n - 1));
             neuralLayers.get(n - 1).setPreviousLayer(neuralLayers.get(n - 2));
@@ -40,9 +39,8 @@ public class NeuralNetwork {
 
         neuralLayers.get(0).feedLayer(inputs);
 
-        double output = neuralLayers.get(neuralLayers.size() - 1).getNeurons().get(0).getOutput();
+        return neuralLayers.get(neuralLayers.size() - 1).getNeurons().get(0).getOutput();
 
-        return output;
     }
 
     public void showWeights1() {
@@ -58,7 +56,7 @@ public class NeuralNetwork {
 
             }
             i++;
-            System.out.println("]");
+            System.out.println("], bias = " + neuron.getBias());
         }
     }
 
@@ -75,7 +73,7 @@ public class NeuralNetwork {
 
             }
             i++;
-            System.out.println("]");
+            System.out.println("], bias = " + neuron.getBias());
         }
     }
 }

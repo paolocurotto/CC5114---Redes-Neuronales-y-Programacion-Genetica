@@ -31,7 +31,7 @@ public class Main extends Application {
         NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 2, 1});
 
         // Train n times
-        int n = 1000;
+        int n = 50000;
 
         graph.setXrange(n);
         graph.setYrange(1);
@@ -49,6 +49,12 @@ public class Main extends Application {
                 double desired = values.get(i).results.get(0);
 
                 //System.out.println("output/desired = " + output + " / " + desired);
+
+                if (output < 0.5) {
+                    output = 0;
+                } else {
+                    output = 1;
+                }
 
                 if (output == desired) {
                     guesses++;
@@ -70,10 +76,9 @@ public class Main extends Application {
 
     private class xor_values {
 
-        public ArrayList<Double> inputs;
-        public ArrayList<Double> results;
+        public ArrayList<Double> inputs = new ArrayList<>();
+        public ArrayList<Double> results = new ArrayList<>();
         public xor_values(int x1, int x2, int output) {
-            inputs = new ArrayList<>();
             inputs.add((double) x1);
             inputs.add((double) x2);
             results.add((double) output);
