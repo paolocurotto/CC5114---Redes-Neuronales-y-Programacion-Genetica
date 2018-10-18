@@ -43,6 +43,10 @@ public class NeuralNetwork {
 
     }
 
+    public NeuronLayer getLastLayer() {
+        return neuralLayers.get(neuralLayers.size() - 1);
+    }
+
     public void showWeights1() {
 
         NeuronLayer layer1 = neuralLayers.get(0);

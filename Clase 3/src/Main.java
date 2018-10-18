@@ -22,13 +22,13 @@ public class Main extends Application {
         stage.show();
 
 
-        ArrayList<xor_values> values = new ArrayList<>();
-        values.add(new xor_values(0, 0, 0));
-        values.add(new xor_values(0, 1, 1));
-        values.add(new xor_values(1, 0, 1));
-        values.add(new xor_values(1, 1, 0));
+        ArrayList<xor_values1> values = new ArrayList<>();
+        values.add(new xor_values1(0, 0, 0));
+        values.add(new xor_values1(0, 1, 1));
+        values.add(new xor_values1(1, 0, 1));
+        values.add(new xor_values1(1, 1, 0));
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 2, 1});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 10, 1});
 
         // Train n times
         int n = 50000;
@@ -74,11 +74,11 @@ public class Main extends Application {
 
     }
 
-    private class xor_values {
+    private class xor_values1 {
 
         public ArrayList<Double> inputs = new ArrayList<>();
         public ArrayList<Double> results = new ArrayList<>();
-        public xor_values(int x1, int x2, int output) {
+        public xor_values1(int x1, int x2, int output) {
             inputs.add((double) x1);
             inputs.add((double) x2);
             results.add((double) output);

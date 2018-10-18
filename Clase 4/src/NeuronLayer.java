@@ -29,18 +29,18 @@ public class NeuronLayer {
     }
 
     // Backward propagation in output layer
-    public void backwardPropagate(ArrayList<Double> expectedOutput) {
+    public void backwardPropagate(ArrayList<Double> expectedOutputs) {
 
         // Check sizes
-        if (neurons.size() != expectedOutput.size())
-            System.err.println("n output neurons="+neurons.size() + " != n desiredoutput="+ expectedOutput.size());
+        if (neurons.size() != expectedOutputs.size())
+            System.err.println("n output neurons="+neurons.size() + " != n desiredoutput="+ expectedOutputs.size());
 
         // Set delta for each output neuron
         for (int n = 0; n < neurons.size(); n++) {
-            double output = neurons.get(n).getOutput();
-            double error = expectedOutput.get(n) - output;
-            double delta = error * output * (1 - output);
-            neurons.get(n).setDelta(delta);
+            double output = this.neurons.get(n).getOutput();
+            double error = expectedOutputs.get(n) - output;
+            double delta = error * (output * (1.0 - output));
+            this.neurons.get(n).setDelta(delta);
         }
 
         // Continue backpropagation
@@ -53,10 +53,9 @@ public class NeuronLayer {
     private void backwardPropagateError() {
 
         // Calculate delta for each neuron in this layer
-        for (int n = 0; n < neurons.size(); n++) {
+        for (int n = 0; n < this.neurons.size(); n++) {
 
-            SigmoidNeuron currentNeuron = neurons.get(n);
-            double output = currentNeuron.getOutput();
+            double output = this.neurons.get(n).getOutput();
 
             // Calculate error
             double error = 0;
@@ -65,8 +64,8 @@ public class NeuronLayer {
             }
 
             // Calculate delta
-            double delta = error * output * (1 - output);
-            currentNeuron.setDelta(delta);
+            double delta = error * (output * (1.0 - output));
+            this.neurons.get(n).setDelta(delta);
 
         }
 
@@ -80,7 +79,7 @@ public class NeuronLayer {
     public void updateWeights(ArrayList<Double> inputs) {
 
         // Update weights and bias for each neuron in the layer
-        for (SigmoidNeuron neuron : neurons) {
+        for (SigmoidNeuron neuron : this.neurons) {
 
             // Check sizes
             if (neuron.getWeights().length != inputs.size())
@@ -104,16 +103,16 @@ public class NeuronLayer {
 
     private ArrayList<Double> getOutputs() {
         ArrayList<Double> o = new ArrayList<>();
-        for (SigmoidNeuron n : neurons) {
+        for (SigmoidNeuron n : this.neurons) {
             o.add(n.getOutput());
         }
         return o;
     }
 
-    public ArrayList<SigmoidNeuron> getNeurons() { return neurons; }
-    public NeuronLayer getNextLayer() { return nextLayer;}
-    public void setNextLayer(NeuronLayer neuronLayer) { nextLayer = neuronLayer; }
-    public NeuronLayer getPreviousLayer() { return previousLayer; }
-    public void setPreviousLayer(NeuronLayer neuronLayer) { previousLayer = neuronLayer; }
+    public ArrayList<SigmoidNeuron> getNeurons() { return this.neurons; }
+    public NeuronLayer getNextLayer() { return this.nextLayer;}
+    public void setNextLayer(NeuronLayer neuronLayer) { this.nextLayer = neuronLayer; }
+    public NeuronLayer getPreviousLayer() { return this.previousLayer; }
+    public void setPreviousLayer(NeuronLayer neuronLayer) { this.previousLayer = neuronLayer; }
 
 }

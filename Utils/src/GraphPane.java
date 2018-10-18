@@ -19,7 +19,7 @@ public class GraphPane {
     private Color color;
 
     public GraphPane() {
-        this(500, 500);
+        this(900, 600);
     }
 
     public GraphPane(int w, int h) {

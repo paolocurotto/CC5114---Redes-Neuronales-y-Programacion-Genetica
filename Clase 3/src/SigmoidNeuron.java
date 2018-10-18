@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SigmoidNeuron {
 
-    private double learningRate = 0.08;
+    private double learningRate = 0.4;
     private double[] weights;
     private double threshold;
     private double delta;
@@ -21,10 +21,10 @@ public class SigmoidNeuron {
         }
 
         // Set random threshold
-        threshold =  ThreadLocalRandom.current().nextDouble(-0.2, 0.2);
+        threshold =  ThreadLocalRandom.current().nextDouble(-0.1, 0.1);
     }
 
-    public double feed(ArrayList<Double> inputs) {
+    public void feed(ArrayList<Double> inputs) {
 
         // Check sizes
         if (inputs.size() != weights.length)
@@ -39,13 +39,11 @@ public class SigmoidNeuron {
 
         double sigmoid = (double) 1 / (1 + Math.exp(-z));
 
-        if (sigmoid <= 0 || 1 <= sigmoid)
-            System.err.println("sigmoid wrong value");
-
+        if (sigmoid < 0 || 1 < sigmoid)
+            System.err.println("sigmoid wrong value: " + sigmoid);
 
         setOutput(sigmoid);
 
-        return sigmoid;
     }
 
     public double[] getWeights() { return weights; }
