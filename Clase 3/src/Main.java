@@ -2,10 +2,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.applet.Applet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main extends Application {
@@ -28,10 +25,10 @@ public class Main extends Application {
         values.add(new xor_values1(1, 0, 1));
         values.add(new xor_values1(1, 1, 0));
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 10, 1});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 2, 1});
 
         // Train n times
-        int n = 50000;
+        int n = 7000;
 
         graph.setXrange(n);
         graph.setYrange(1);
@@ -45,10 +42,8 @@ public class Main extends Application {
             // Test after new value
             int guesses = 0;
             for (int i = 0; i < 4; i++) {
-                double output = neuralNetwork.evaluate(values.get(i).inputs);
+                double output = neuralNetwork.evaluate(values.get(i).inputs).get(0);
                 double desired = values.get(i).results.get(0);
-
-                //System.out.println("output/desired = " + output + " / " + desired);
 
                 if (output < 0.5) {
                     output = 0;
@@ -65,7 +60,7 @@ public class Main extends Application {
 
             double performance = (double) guesses / 4;
 
-            System.out.println("Performance = " + performance);
+            //System.out.println("Performance = " + performance);
 
             graph.drawPoint(a, performance);
 

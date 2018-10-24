@@ -1,5 +1,4 @@
-import com.sun.istack.internal.NotNull;
-
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NeuralNetwork {
@@ -14,12 +13,10 @@ public class NeuralNetwork {
 
             neuralLayers.add(new NeuronLayer(layers[n], layers[n - 1]));
 
-            if (neuralLayers.size() < 2) {
-                continue;
+            if (neuralLayers.size() >= 2) {
+                neuralLayers.get(n - 2).setNextLayer(neuralLayers.get(n - 1));
+                neuralLayers.get(n - 1).setPreviousLayer(neuralLayers.get(n - 2));
             }
-
-            neuralLayers.get(n - 2).setNextLayer(neuralLayers.get(n - 1));
-            neuralLayers.get(n - 1).setPreviousLayer(neuralLayers.get(n - 2));
         }
     }
 
@@ -35,49 +32,44 @@ public class NeuralNetwork {
         neuralLayers.get(0).updateWeights(inputs);
     }
 
-    public double evaluate(ArrayList<Double> inputs) {
+    public void trainNetworkWithDataset(ArrayList<ArrayList<Double>> dataset) {
+
+        // Start forward feeding
+        //neuralLayers.get(0).feedLayer(inputs);
+
+        // Start backward propagation
+        //neuralLayers.get(neuralLayers.size() - 1).backwardPropagate(expectedOutput);
+
+        // Start weights update
+        //neuralLayers.get(0).updateWeights(inputs);
+    }
+
+    public ArrayList<Double> evaluate(ArrayList<Double> inputs) {
 
         neuralLayers.get(0).feedLayer(inputs);
-
-        return neuralLayers.get(neuralLayers.size() - 1).getNeurons().get(0).getOutput();
-
+        return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
     }
 
-    public NeuronLayer getLastLayer() {
-        return neuralLayers.get(neuralLayers.size() - 1);
-    }
+    public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, int nOfEpochs) {
 
-    public void showWeights1() {
+        // Iterate number of epochs times
+        for (int i = 0; i < nOfEpochs; i++) {
 
-        NeuronLayer layer1 = neuralLayers.get(0);
-        int i = 0;
-        System.out.println("");
-        for (SigmoidNeuron neuron : layer1.getNeurons()) {
-            System.out.print("neuron " + i + " : [");
+            double mean_squared_error = 0;
 
-            for (double weight : neuron.getWeights()) {
-                System.out.print(weight + ", ");
+            // Iterate through dataset
+            for (DataValue data : dataset) {
+
+                // Get inputs
+                ArrayList<Double> inputs = data.inputs;
+
+                // Get desired outputs
+                ArrayList<Double> desiredOutputs = data.desiredOutputs;
 
             }
-            i++;
-            System.out.println("], bias = " + neuron.getBias());
         }
     }
 
-    public void showWeights2() {
 
-        NeuronLayer layer1 = neuralLayers.get(1);
-        int i = 0;
-        System.out.println("");
-        for (SigmoidNeuron neuron : layer1.getNeurons()) {
-            System.out.print("neuron " + i + " : [");
 
-            for (double weight : neuron.getWeights()) {
-                System.out.print(weight + ", ");
-
-            }
-            i++;
-            System.out.println("], bias = " + neuron.getBias());
-        }
-    }
 }

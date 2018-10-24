@@ -3,8 +3,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SigmoidNeuron {
 
-    private double learningRate = 0.4;
-    private double[] weights;
+    private double learningRate = 3;
+    private ArrayList<Double> weights = new ArrayList();
     private double threshold;
     private double delta;
     private double output;
@@ -12,12 +12,9 @@ public class SigmoidNeuron {
 
     public SigmoidNeuron(int n_of_weights) {
 
-        weights = new double[n_of_weights];
-
         // Set random weights
         for (int n = 0; n < n_of_weights; n++) {
-            //weights.add(ThreadLocalRandom.current().nextDouble(-0.3, 0.3));
-            weights[n] = ThreadLocalRandom.current().nextDouble(-0.2, 0.2);
+            weights.add(ThreadLocalRandom.current().nextDouble(-0.3, 0.3));
         }
 
         // Set random threshold
@@ -27,26 +24,23 @@ public class SigmoidNeuron {
     public void feed(ArrayList<Double> inputs) {
 
         // Check sizes
-        if (inputs.size() != weights.length)
-            System.err.println("n inputs "+inputs.size()+" != n weights " + weights.length);
+        if (inputs.size() != weights.size())
+            System.err.println("n inputs "+inputs.size()+" != n weights " + weights.size());
 
         double z = 0;
         for (int i = 0; i < inputs.size(); i++) {
-            z = z + (inputs.get(i) * weights[i]);
+            z = z + (inputs.get(i) * weights.get(i));
         }
 
-        z = z - threshold;
+        z = z + threshold;
 
-        double sigmoid = (double) 1 / (1 + Math.exp(-z));
-
-        if (sigmoid < 0 || 1 < sigmoid)
-            System.err.println("sigmoid wrong value: " + sigmoid);
+        double sigmoid = 1 / (1 + Math.exp(-z));
 
         setOutput(sigmoid);
 
     }
 
-    public double[] getWeights() { return weights; }
+    public ArrayList<Double> getWeights() { return weights; }
     public double getLearningRate() { return  learningRate; }
     public double getOutput() { return output; }
     public void setOutput(double o) { this.output = o; }
