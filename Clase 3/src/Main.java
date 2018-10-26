@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         GraphPane graph = new GraphPane();
-        Scene scene = new Scene(graph.getGraph(), Color.WHITESMOKE);
+        Scene scene = new Scene(graph.getLineChart(), Color.WHITESMOKE);
         stage.setTitle("XOR");
         stage.setScene(scene);
         stage.show();
@@ -28,7 +28,7 @@ public class Main extends Application {
         NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 2, 1});
 
         // Train n times
-        int n = 7000;
+        int n = 5000;
 
         graph.setXrange(n);
         graph.setYrange(1);
@@ -56,13 +56,11 @@ public class Main extends Application {
                 }
             }
 
-            //System.out.println("Performance = " + guesses + " / 4");
 
             double performance = (double) guesses / 4;
 
-            //System.out.println("Performance = " + performance);
 
-            graph.drawPoint(a, performance);
+            graph.addValue(a, performance);
 
         }
 

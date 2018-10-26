@@ -7,6 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class XOR_Test extends Application {
@@ -32,16 +34,11 @@ public class XOR_Test extends Application {
         stage.show();
 
 
-        xor_values.add(new XorValues(0, 0, 0));
-        xor_values.add(new XorValues(0, 1, 1));
-        xor_values.add(new XorValues(1, 0, 1));
-        xor_values.add(new XorValues(1, 1, 0));
-
-
-
-
-
-        ArrayList<Double> inputs = new ArrayList<>();
+        ArrayList<DataValue> dataset = new ArrayList<>();
+        dataset.add(new DataValue(new double[] {0, 0}, new double[] {0}));
+        dataset.add(new DataValue(new double[] {0, 1}, new double[] {1}));
+        dataset.add(new DataValue(new double[] {1, 0}, new double[] {1}));
+        dataset.add(new DataValue(new double[] {1, 1}, new double[] {0}));
 
         new AnimationTimer() {
 
@@ -53,30 +50,29 @@ public class XOR_Test extends Application {
                 a++;
 
                 if (a % 100 == 0) {
-                    System.out.print("iter = " + a + ", ");
+                    System.out.println("iter = " + a + ", ");
                 }
 
-                for (int b = 0; b <= 500; b++) {
-                    int r = ThreadLocalRandom.current().nextInt(0, xor_values.size());
-                    neuralNetwork.trainNetwork(xor_values.get(r).inputs, xor_values.get(r).results);
-                }
+                int r = ThreadLocalRandom.current().nextInt(0, xor_values.size());
+
+                //neuralNetwork.trainNetworkWithEpochs(dataset, 1, graph);
+
+
 
                 int res = width / n_rects;
-
-
                 for (int x = 0; x < n_rects; x++) {
-
                     for (int y = 0; y < n_rects; y++) {
-
-                        inputs.clear();
-                        inputs.add(x / (n_rects - 1.0));
-                        inputs.add(y / (n_rects - 1.0));
-                        double output = neuralNetwork.evaluate(inputs).get(0);
-                        int grey_c = (int) (255 * output);
-                        gc.setFill(Color.rgb(grey_c, grey_c, grey_c));
-                        gc.fillRect(x * res, y * res, res, res);
+                        //inputs.clear();
+                        //inputs.add(x / (n_rects - 1.0));
+                        //inputs.add(y / (n_rects - 1.0));
+                        //double output = neuralNetwork.evaluate(inputs).get(0);
+                        //int grey_c = (int) (255 * output);
+                        //gc.setFill(Color.rgb(grey_c, grey_c, grey_c));
+                        //gc.fillRect(x * res, y * res, res, res);
                     }
                 }
+
+
             }
         }.start();
 
@@ -84,12 +80,13 @@ public class XOR_Test extends Application {
 
     private class XorValues {
 
-        ArrayList<Double> inputs = new ArrayList<>();
-        ArrayList<Double> results = new ArrayList<>();
-        XorValues(double x1, double x2, double output) {
-            inputs.add(x1);
-            inputs.add(x2);
-            results.add(output);
+        public ArrayList<Double> inputs = new ArrayList<>();
+        public ArrayList<Double> results = new ArrayList<>();
+        public XorValues(int x1, int x2, int output) {
+            inputs.add((double) x1);
+            inputs.add((double) x2);
+            results.add((double) output);
         }
+
     }
 }

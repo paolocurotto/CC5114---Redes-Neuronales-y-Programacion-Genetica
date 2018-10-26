@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class NeuralNetwork {
 
     private ArrayList<NeuronLayer> neuralLayers = new ArrayList<>();
+    public int epoch = 0;
 
     public NeuralNetwork(int[] layers) {
 
@@ -32,32 +33,23 @@ public class NeuralNetwork {
         neuralLayers.get(0).updateWeights(inputs);
     }
 
-    public void trainNetworkWithDataset(ArrayList<ArrayList<Double>> dataset) {
 
-        // Start forward feeding
-        //neuralLayers.get(0).feedLayer(inputs);
-
-        // Start backward propagation
-        //neuralLayers.get(neuralLayers.size() - 1).backwardPropagate(expectedOutput);
-
-        // Start weights update
-        //neuralLayers.get(0).updateWeights(inputs);
-    }
 
     public ArrayList<Double> evaluate(ArrayList<Double> inputs) {
-
         neuralLayers.get(0).feedLayer(inputs);
         return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
     }
 
-    public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, int nOfEpochs) {
+    public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, int nOfEpochs, GraphPane graphPane) {
 
         // Iterate number of epochs times
         for (int i = 0; i < nOfEpochs; i++) {
 
             double mean_squared_error = 0;
+            int true_positive_count = 0;
+            int false_positive_count = 0;
 
-            // Iterate through dataset
+            // Iterate through data set
             for (DataValue data : dataset) {
 
                 // Get inputs
@@ -66,7 +58,30 @@ public class NeuralNetwork {
                 // Get desired outputs
                 ArrayList<Double> desiredOutputs = data.desiredOutputs;
 
+                // Training
+                neuralLayers.get(0).feedLayer(inputs);
+                neuralLayers.get(neuralLayers.size() - 1).backwardPropagate(desiredOutputs);
+                neuralLayers.get(0).updateWeights(inputs);
+
+                // Get outputs
+                ArrayList<Double> outputs = neuralLayers.get(neuralLayers.size() - 1).getOutputs();
+
+                // Calculate Info
+
+                //mean_squared_error
+                double input_error = 0;
+                for (int k = 0; k < desiredOutputs.size(); k++) {
+
+                    input_error += Math.pow(desiredOutputs.get(k) - outputs.get(k), 2);
+                }
+
+                mean_squared_error += input_error;
             }
+
+            // After epoch of training
+            mean_squared_error = (double) mean_squared_error / dataset.size();
+
+            graphPane.addValue(epoch++, mean_squared_error);
         }
     }
 

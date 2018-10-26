@@ -14,4 +14,16 @@ public class DataValue {
         desiredOutputs = o;
     }
 
+    public DataValue(double[] i, double[] o) {
+
+        for (int iter = 0; iter < i.length; iter++) {
+            inputs.add(i[iter]);
+        }
+
+        for (int iter = 0; iter < o.length; iter++) {
+            desiredOutputs.add(o[iter]);
+        }
+
+    }
+
 }

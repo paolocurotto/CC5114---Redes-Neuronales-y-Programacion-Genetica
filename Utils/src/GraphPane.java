@@ -1,8 +1,12 @@
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.chart.LineChart;
+
 
 public class GraphPane {
 
@@ -18,25 +22,47 @@ public class GraphPane {
 
     private Color color;
 
+    LineChart lineChart;
+    XYChart.Series chartSeries = new XYChart.Series();
+
+
     public GraphPane() {
-        this(900, 600);
+        this(1100, 700);
     }
 
     public GraphPane(int w, int h) {
-        pane = new Pane();
-        width = w - (2 * margin);
-        height = h - (2 * margin);
-        pane.setPrefWidth(width);
-        pane.setPrefHeight(height);
-        old_x = -1;
-        old_y = -1;
 
-        // Set axes
-        Line x_axis = new Line(0, height, width, height);
-        Line y_axis = new Line(0, height, 0, 0);
-        pane.getChildren().addAll(x_axis, y_axis);
+        // defining the axes
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Epoch");
+        yAxis.setLabel("Mean Squared Error");
+
+        // creating the chart
+        lineChart = new LineChart(xAxis,yAxis);
+        lineChart.setPrefSize(w, h);
+
+        lineChart.setTitle("line chart");
+
+        // defining a series
+        chartSeries.setName("specific curve");
+
+
 
     }
+
+    public void addValue(double x, double y) {
+        chartSeries.getData().add(new XYChart.Data(x, y));
+
+    }
+
+    public LineChart getLineChart() {
+
+        lineChart.getData().add(chartSeries);
+
+        return lineChart;
+    }
+
 
     public void setXrange(double x) {
         max_x = x;
