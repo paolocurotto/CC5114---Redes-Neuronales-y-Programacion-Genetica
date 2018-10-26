@@ -16,7 +16,10 @@ public class Main_4 extends Application {
     private int width = 400;
     private int height = 400;
 
-    private NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 10, 1});
+    private NeuralNetwork neuralNetwork2 = new NeuralNetwork(new int[] {2, 2, 1});
+    private NeuralNetwork neuralNetwork3 = new NeuralNetwork(new int[] {2, 3, 1});
+    private NeuralNetwork neuralNetwork4 = new NeuralNetwork(new int[] {2, 4, 1});
+    private NeuralNetwork neuralNetwork5 = new NeuralNetwork(new int[] {2, 5, 1});
 
     public static void main (String[] args) { launch(args); }
 
@@ -29,6 +32,11 @@ public class Main_4 extends Application {
         stage.setScene(scene);
         stage.show();
 
+        neuralNetwork2.identifier = 2;
+        neuralNetwork3.identifier = 3;
+        neuralNetwork4.identifier = 4;
+        neuralNetwork5.identifier = 5;
+
 
         ArrayList<DataValue> dataset = new ArrayList<>();
         dataset.add(new DataValue(new double[] {0, 0}, new double[] {0}));
@@ -36,8 +44,13 @@ public class Main_4 extends Application {
         dataset.add(new DataValue(new double[] {1, 0}, new double[] {1}));
         dataset.add(new DataValue(new double[] {1, 1}, new double[] {0}));
 
+        neuralNetwork2.trainNetworkWithEpochs(dataset, 2000, graph);
+        neuralNetwork3.trainNetworkWithEpochs(dataset, 2000, graph);
+        neuralNetwork4.trainNetworkWithEpochs(dataset, 2000, graph);
+        neuralNetwork5.trainNetworkWithEpochs(dataset, 2000, graph);
 
 
+/*
         new AnimationTimer() {
             int a = 0;
             int x = 0, y = 0;
@@ -48,18 +61,9 @@ public class Main_4 extends Application {
                     System.out.println("Epoch = " + neuralNetwork.epoch );
                     //graph.addValue(x++, y++);
                     neuralNetwork.trainNetworkWithEpochs(dataset, 1, graph);
-
                 }
-
             }
         }.start();
-
-
-        //neuralNetwork.trainNetworkWithEpochs(dataset, 20000, graph);
-
-
-
+*/
     }
-
-
 }

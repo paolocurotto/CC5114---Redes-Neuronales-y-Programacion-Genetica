@@ -5,6 +5,7 @@ public class NeuralNetwork {
 
     private ArrayList<NeuronLayer> neuralLayers = new ArrayList<>();
     public int epoch = 0;
+    public int identifier;
 
     public NeuralNetwork(int[] layers) {
 
@@ -81,7 +82,7 @@ public class NeuralNetwork {
             // After epoch of training
             mean_squared_error = (double) mean_squared_error / dataset.size();
 
-            graphPane.addValue(epoch++, mean_squared_error);
+            graphPane.addValue(epoch++, mean_squared_error, identifier);
         }
     }
 

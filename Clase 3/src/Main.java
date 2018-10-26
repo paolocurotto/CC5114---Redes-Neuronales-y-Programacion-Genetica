@@ -60,7 +60,7 @@ public class Main extends Application {
             double performance = (double) guesses / 4;
 
 
-            graph.addValue(a, performance);
+            graph.addValue(a, performance, 2);
 
         }
 

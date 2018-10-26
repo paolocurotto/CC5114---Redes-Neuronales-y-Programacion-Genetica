@@ -23,7 +23,10 @@ public class GraphPane {
     private Color color;
 
     LineChart lineChart;
-    XYChart.Series chartSeries = new XYChart.Series();
+    XYChart.Series chartSeries2 = new XYChart.Series();
+    XYChart.Series chartSeries3 = new XYChart.Series();
+    XYChart.Series chartSeries4 = new XYChart.Series();
+    XYChart.Series chartSeries5 = new XYChart.Series();
 
 
     public GraphPane() {
@@ -45,21 +48,43 @@ public class GraphPane {
         lineChart.setTitle("line chart");
 
         // defining a series
-        chartSeries.setName("specific curve");
-
-
+        chartSeries2.setName("2 hidden n");
+        chartSeries3.setName("3 hidden n");
+        chartSeries4.setName("4 hidden n");
+        chartSeries5.setName("5 hidden n");
 
     }
 
-    public void addValue(double x, double y) {
-        chartSeries.getData().add(new XYChart.Data(x, y));
+    public void addValue(double x, double y, int nchart) {
+
+        switch (nchart) {
+            case 2:
+                chartSeries2.getData().add(new XYChart.Data(x, y));
+                break;
+            case 3:
+                chartSeries3.getData().add(new XYChart.Data(x, y));
+                break;
+
+            case 4:
+                chartSeries4.getData().add(new XYChart.Data(x, y));
+                break;
+
+            case 5:
+                chartSeries5.getData().add(new XYChart.Data(x, y));
+                break;
+
+
+            default:
+                System.err.println("error case");
+
+        }
+
 
     }
 
     public LineChart getLineChart() {
 
-        lineChart.getData().add(chartSeries);
-
+        lineChart.getData().addAll(chartSeries2, chartSeries3, chartSeries4, chartSeries5);
         return lineChart;
     }
 
