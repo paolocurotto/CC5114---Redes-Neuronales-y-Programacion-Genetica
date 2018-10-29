@@ -30,8 +30,7 @@ public class Main extends Application {
         // Train n times
         int n = 5000;
 
-        graph.setXrange(n);
-        graph.setYrange(1);
+
 
         for (int a = 0; a < n; a++) {
 
@@ -60,7 +59,6 @@ public class Main extends Application {
             double performance = (double) guesses / 4;
 
 
-            graph.addValue(a, performance, 2);
 
         }
 

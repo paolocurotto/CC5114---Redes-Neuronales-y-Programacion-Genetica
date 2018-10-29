@@ -1,16 +1,13 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NeuralNetwork {
 
     private ArrayList<NeuronLayer> neuralLayers = new ArrayList<>();
-    public int epoch = 0;
-    public int identifier;
 
+
+    // layers[0] -> number of inputs
+    // layers[1 .. n] -> number of neurons of layer n
     public NeuralNetwork(int[] layers) {
-
-        // layers[0] -> number of inputs
-        // layers[1 .. n] -> number of neurons of layer n
         for (int n = 1; n < layers.length; n++) {
 
             neuralLayers.add(new NeuronLayer(layers[n], layers[n - 1]));
@@ -35,16 +32,16 @@ public class NeuralNetwork {
     }
 
 
-
     public ArrayList<Double> evaluate(ArrayList<Double> inputs) {
         neuralLayers.get(0).feedLayer(inputs);
         return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
     }
 
+
     public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, int nOfEpochs, GraphPane graphPane) {
 
         // Iterate number of epochs times
-        for (int i = 0; i < nOfEpochs; i++) {
+        for (int epoch = 0; epoch < nOfEpochs; epoch++) {
 
             double mean_squared_error = 0;
             int true_positive_count = 0;
@@ -59,33 +56,51 @@ public class NeuralNetwork {
                 // Get desired outputs
                 ArrayList<Double> desiredOutputs = data.desiredOutputs;
 
-                // Training
-                neuralLayers.get(0).feedLayer(inputs);
-                neuralLayers.get(neuralLayers.size() - 1).backwardPropagate(desiredOutputs);
-                neuralLayers.get(0).updateWeights(inputs);
+                // Train
+                trainNetwork(inputs, desiredOutputs);
 
                 // Get outputs
                 ArrayList<Double> outputs = neuralLayers.get(neuralLayers.size() - 1).getOutputs();
 
-                // Calculate Info
+               /*
+               * Calculate Info
+               * */
 
-                //mean_squared_error
+                // Check prediction
+                switch (DataValue.checkAnswer(outputs, desiredOutputs)) {
+                    case TRUE_POSITIVE:
+                        true_positive_count++;
+                        break;
+
+                    case FALSE_POSITIVE:
+                        false_positive_count++;
+                        break;
+                }
+
+                // Mean_squared_error of this input
                 double input_error = 0;
                 for (int k = 0; k < desiredOutputs.size(); k++) {
-
                     input_error += Math.pow(desiredOutputs.get(k) - outputs.get(k), 2);
                 }
 
+                // Add to overall error of epoch
                 mean_squared_error += input_error;
             }
 
-            // After epoch of training
-            mean_squared_error = (double) mean_squared_error / dataset.size();
+            /*
+             * After epoch of training
+             * */
 
-            graphPane.addValue(epoch++, mean_squared_error, identifier);
+            // Calculate mean squared error and precision of epoch
+            mean_squared_error = mean_squared_error / dataset.size();
+            double precision = (double) true_positive_count / (true_positive_count + false_positive_count);
+
+            // Add values to line charts
+            graphPane.addValueMSE(epoch, mean_squared_error);
+            graphPane.addValuePrecision(epoch, precision);
+
         }
+
     }
-
-
 
 }
