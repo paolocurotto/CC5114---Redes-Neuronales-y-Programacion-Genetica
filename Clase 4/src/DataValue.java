@@ -69,33 +69,53 @@ public class DataValue {
         FALSE_NEGATIVE,
     }
 
-    public static Prediction checkAnswer(ArrayList<Double> real, ArrayList<Double> desired) {
+    public static Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
 
-        double precision = 0.7;
-        for (int i = 0; i < desired.size(); i++) {
+        // Model with 1 output
+        if (prediction.size() == 1) {
 
-            // This output must be 1
-            if (desired.get(i) == 1) {
-
-                // Check if output got gives 1 in this output
-                if (real.get(i) > precision) {
+            // Predicted true
+            if (prediction.get(0) > 0.5) {
+                if (desired.get(0) == 1) {
                     return Prediction.TRUE_POSITIVE;
-                } else {
+                } else if (desired.get(0) == 0) {
                     return Prediction.FALSE_POSITIVE;
                 }
             }
+
+            // Predicted false
+            else {
+                if (desired.get(0) == 1) {
+                    return Prediction.FALSE_NEGATIVE;
+                } else if (desired.get(0) == 0) {
+                    return Prediction.TRUE_NEGATIVE;
+                }
+            }
+
         }
 
-        // Noone is positive
-        for (int i = 0; i < desired.size(); i++) {
+        // Model with multiple outputs
+        else if (prediction.size() > 1) {
+            // Find index of highest value in prediction (= answer)
+            int index = 0;
+            for (int i = 1; i < desired.size(); i++) {
+                if (prediction.get(index) < prediction.get(i)) {
+                    index = i;
+                }
+            }
 
-            // Check if any output got gives 1 in this output
-            if (real.get(i) > precision) {
-                return Prediction.FALSE_NEGATIVE;
+            // Check if prediction was correct
+            if (desired.get(index) == 1) {
+                return Prediction.TRUE_POSITIVE;
+
+            } else if (desired.get(index) == 0) {
+                return Prediction.FALSE_POSITIVE;
             }
         }
-        return Prediction.TRUE_NEGATIVE;
-    }
 
+        System.err.println("Error checking answer");
+        return null;
+
+    }
 
 }

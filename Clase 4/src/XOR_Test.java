@@ -16,7 +16,7 @@ public class XOR_Test extends Application {
     private int height = 400;
     private Canvas canvas = new Canvas(width, height);
     private ArrayList<XorValues> xor_values = new ArrayList<>();
-    private NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 10, 1});
+    private NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 150, 1});
     private Pane root = new Pane();
 
     public static void main (String[] args) { launch(args); }
@@ -36,9 +36,6 @@ public class XOR_Test extends Application {
         xor_values.add(new XorValues(0, 1, 1));
         xor_values.add(new XorValues(1, 0, 1));
         xor_values.add(new XorValues(1, 1, 0));
-
-
-
 
 
         ArrayList<Double> inputs = new ArrayList<>();
