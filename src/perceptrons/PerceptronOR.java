@@ -1,3 +1,5 @@
+package perceptrons;
+
 public class PerceptronOR extends Perceptron {
 
     public PerceptronOR() {
