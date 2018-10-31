@@ -1,17 +1,17 @@
-import javafx.geometry.Insets;
+package Utils;
+
 import javafx.scene.Node;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.chart.LineChart;
-import javafx.scene.paint.Color;
 
 
 public class GraphPane {
 
-    private int width = 900;
-    private int height = 800;
+    private static int width = 900;
+    private static int height = 800;
 
     private LineChart lineChartMSE;
     private XYChart.Series chartMSE = new XYChart.Series();
@@ -19,37 +19,31 @@ public class GraphPane {
     private XYChart.Series chartPrecision = new XYChart.Series();
     private XYChart.Series redLine = new XYChart.Series();
 
-    GraphPane() {
-        this(1100, 700);
+    public GraphPane() {
+        this(width, height);
     }
 
     GraphPane(int w, int h) {
 
         // defining axes
-        NumberAxis xAxis_epoch = new NumberAxis();
+        NumberAxis xAxis_epoch_mse = new NumberAxis();
+        NumberAxis xAxis_epoch_p = new NumberAxis();
         NumberAxis yAxis_mse = new NumberAxis();
         NumberAxis yAxis_precision = new NumberAxis();
-        xAxis_epoch.setLabel("Epoch");
+        xAxis_epoch_mse.setLabel("Epochs");
+        xAxis_epoch_p.setLabel("Epochs");
         yAxis_mse.setLabel("Mean Squared Error");
         yAxis_precision.setLabel("Precision");
 
         // creating charts
-        lineChartMSE = new LineChart(xAxis_epoch, yAxis_mse);
-        lineChartPrecision = new LineChart(xAxis_epoch, yAxis_precision);
-        lineChartMSE.setPrefSize(width, height);
-        lineChartPrecision.setPrefSize(width, height);
-
+        lineChartMSE = new LineChart(xAxis_epoch_mse, yAxis_mse);
+        lineChartPrecision = new LineChart(xAxis_epoch_p, yAxis_precision);
+        lineChartMSE.setPrefSize(w, h);
+        lineChartPrecision.setPrefSize(w, h);
         lineChartMSE.setTitle("Mean squared error");
         lineChartPrecision.setTitle("Precision");
-
         lineChartMSE.getData().addAll(chartMSE);
         lineChartPrecision.getData().addAll(redLine, chartPrecision);
-
-
-        // defining series
-        chartMSE.setName("mse");
-        chartPrecision.setName("precision");
-        redLine.setName("p = 1");
 
         // set colors
         Node line_mse = chartMSE.getNode().lookup(".chart-series-line");
@@ -57,8 +51,7 @@ public class GraphPane {
         Node red_line = redLine.getNode().lookup(".chart-series-line");
         line_mse.setStyle("-fx-stroke: #0000cd;" + "-fx-stroke-width: 2px;"); // set width of line
         line_p.setStyle("-fx-stroke: #228b22;" + "-fx-stroke-width: 2px;"); // set width of line
-        red_line.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 1px;"); // set width of line
-
+        red_line.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;"); // set width of line
 
         // remove dots
         lineChartMSE.setCreateSymbols(false);
@@ -67,7 +60,6 @@ public class GraphPane {
     }
 
     public void addValueMSE(double x, double y) {
-
         chartMSE.getData().add(new XYChart.Data(x, y));
     }
 

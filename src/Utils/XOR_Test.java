@@ -1,3 +1,5 @@
+package Utils;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -6,6 +8,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import neural_network.NeuralNetwork;
+
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
