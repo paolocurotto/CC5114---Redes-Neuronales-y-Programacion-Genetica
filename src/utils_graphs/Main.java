@@ -1,4 +1,4 @@
-package Utils;
+package utils_graphs;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

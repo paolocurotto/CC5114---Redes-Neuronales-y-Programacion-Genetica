@@ -1,4 +1,4 @@
-package Utils;
+package utils_graphs;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

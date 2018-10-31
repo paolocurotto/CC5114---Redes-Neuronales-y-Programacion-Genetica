@@ -1,4 +1,4 @@
-package Utils;
+package utils_graphs;
 
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;

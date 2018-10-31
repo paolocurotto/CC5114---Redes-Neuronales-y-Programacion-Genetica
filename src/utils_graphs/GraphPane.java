@@ -1,4 +1,4 @@
-package Utils;
+package utils_graphs;
 
 import javafx.scene.Node;
 import javafx.scene.chart.NumberAxis;
