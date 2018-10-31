@@ -1,6 +1,6 @@
 package neural_network;
 
-import utils.GraphPane;
+import utils_graphs.GraphPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;

@@ -20,7 +20,7 @@ public class XOR_Test extends Application {
     private int height = 400;
     private Canvas canvas = new Canvas(width, height);
     private ArrayList<XorValues> xor_values = new ArrayList<>();
-    private NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 150, 1});
+    private NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 3, 2});
     private Pane root = new Pane();
 
     public static void main (String[] args) { launch(args); }
@@ -36,10 +36,10 @@ public class XOR_Test extends Application {
         stage.show();
 
 
-        xor_values.add(new XorValues(0, 0, 0));
-        xor_values.add(new XorValues(0, 1, 1));
-        xor_values.add(new XorValues(1, 0, 1));
-        xor_values.add(new XorValues(1, 1, 0));
+        xor_values.add(new XorValues(0, 0, 1, 0));
+        xor_values.add(new XorValues(0, 1, 0, 1));
+        xor_values.add(new XorValues(1, 0, 0, 1));
+        xor_values.add(new XorValues(1, 1, 1, 0));
 
 
         ArrayList<Double> inputs = new ArrayList<>();
@@ -57,7 +57,7 @@ public class XOR_Test extends Application {
                     System.out.print("iter = " + a + ", ");
                 }
 
-                for (int b = 0; b <= 500; b++) {
+                for (int b = 0; b <= 200; b++) {
                     int r = ThreadLocalRandom.current().nextInt(0, xor_values.size());
                     neuralNetwork.trainNetwork(xor_values.get(r).inputs, xor_values.get(r).results);
                 }
@@ -87,10 +87,11 @@ public class XOR_Test extends Application {
 
         ArrayList<Double> inputs = new ArrayList<>();
         ArrayList<Double> results = new ArrayList<>();
-        XorValues(double x1, double x2, double output) {
+        XorValues(double x1, double x2, double output1, double output2) {
             inputs.add(x1);
             inputs.add(x2);
-            results.add(output);
+            results.add(output1);
+            results.add(output2);
         }
     }
 }

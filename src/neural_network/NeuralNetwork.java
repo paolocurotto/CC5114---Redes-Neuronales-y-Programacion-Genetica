@@ -1,6 +1,6 @@
 package neural_network;
 
-import utils.GraphPane;
+import utils_graphs.GraphPane;
 import java.util.ArrayList;
 
 import static neural_network.DataValue.*;
