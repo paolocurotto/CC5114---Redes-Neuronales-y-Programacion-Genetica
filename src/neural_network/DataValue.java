@@ -1,8 +1,10 @@
+package neural_network;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Set of inputs and desired outputs
+ * Set of inputs and desired outputs & utility stuff
  * */
 
 public class DataValue {
@@ -27,19 +29,24 @@ public class DataValue {
 
     }
 
-    public static ArrayList<DataValue> normalizeDataset(ArrayList<DataValue> dataset) {
+    /***
+     * Returns a normalized data set
+     * */
+    public static void normalizeDataset(ArrayList<DataValue> dataset) {
 
         ArrayList<DataValue> normalizedDataset = new ArrayList<>();
 
         /*
-            dL = inputs' lowest value
-            dH = inputs' highest value
+        *   dL = inputs' lowest value
+        *   dH = inputs' highest value
+        *   nL = normalized lowest value desired
+        *   nH = normalized highest value desired
         */
 
         double dL = Double.MAX_VALUE;
         double dH = Double.MIN_VALUE;
         double nL = 0;
-        double nH = 0;
+        double nH = 1;
 
         for (DataValue dataValue : dataset) {
             dL = Math.min(dL, Collections.min(dataValue.inputs));
@@ -48,19 +55,20 @@ public class DataValue {
 
         for (DataValue dataValue : dataset) {
 
-            for (double input : dataValue.inputs) {
+            for (int i = 0; i < dataValue.inputs.size(); i++) {
 
-                //double[] norminp = new double[];
-
-                //normalizedDataset.add(new DataValue())
+                double fx = ((double) ((dataValue.inputs.get(i) - dL) * (nH - nL)) / (dH - dL)) + nL;
+                dataValue.inputs.set(i, fx);
 
             }
         }
 
-
-
-        return normalizedDataset;
     }
+
+
+    /**
+     * Check prediction of the neural network
+     * */
 
     enum Prediction {
         TRUE_POSITIVE,
@@ -68,6 +76,7 @@ public class DataValue {
         TRUE_NEGATIVE,
         FALSE_NEGATIVE,
     }
+
 
     public static Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
 

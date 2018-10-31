@@ -1,4 +1,9 @@
+package neural_network;
+
+import utils.GraphPane;
 import java.util.ArrayList;
+
+import static neural_network.DataValue.*;
 
 public class NeuralNetwork {
 
@@ -40,6 +45,9 @@ public class NeuralNetwork {
 
     public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, int nOfEpochs, GraphPane graphPane) {
 
+        // Normalize data set
+        normalizeDataset(dataset);
+
         // Iterate number of epochs times
         for (int epoch = 0; epoch < nOfEpochs; epoch++) {
 
@@ -67,7 +75,7 @@ public class NeuralNetwork {
                * */
 
                 // Check prediction
-                switch (DataValue.checkAnswer(outputs, desiredOutputs)) {
+                switch (checkAnswer(outputs, desiredOutputs)) {
                     case TRUE_POSITIVE:
                         true_positive_count++;
                         break;

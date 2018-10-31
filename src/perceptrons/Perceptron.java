@@ -1,3 +1,5 @@
+package perceptrons;
+
 public class Perceptron {
 
     public double[] inputs;

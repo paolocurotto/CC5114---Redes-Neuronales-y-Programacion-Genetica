@@ -1,3 +1,5 @@
+package perceptrons;
+
 public class PerceptronAND extends Perceptron {
 
     public PerceptronAND() {

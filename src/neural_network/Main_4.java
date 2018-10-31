@@ -1,3 +1,6 @@
+package neural_network;
+
+import utils.GraphPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -12,7 +15,7 @@ public class Main_4 extends Application {
     @Override
     public void start(Stage stage) {
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 3, 2});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 30, 2});
 
         GraphPane graph = new GraphPane();
         Scene scene = new Scene(graph.getLineChart(), Color.WHITESMOKE);
@@ -22,11 +25,11 @@ public class Main_4 extends Application {
 
         ArrayList<DataValue> dataset = new ArrayList<>();
         dataset.add(new DataValue(new double[] {0, 0}, new double[] {1, 0}));
-        dataset.add(new DataValue(new double[] {0, 1}, new double[] {0, 1}));
-        dataset.add(new DataValue(new double[] {1, 0}, new double[] {0, 1}));
-        dataset.add(new DataValue(new double[] {1, 1}, new double[] {1, 0}));
+        dataset.add(new DataValue(new double[] {0, 50}, new double[] {0, 1}));
+        dataset.add(new DataValue(new double[] {50, 0}, new double[] {0, 1}));
+        dataset.add(new DataValue(new double[] {50, 50}, new double[] {1, 0}));
 
-        neuralNetwork.trainNetworkWithEpochs(dataset, 5000, graph);
+        neuralNetwork.trainNetworkWithEpochs(dataset, 2000, graph);
 
     }
 }

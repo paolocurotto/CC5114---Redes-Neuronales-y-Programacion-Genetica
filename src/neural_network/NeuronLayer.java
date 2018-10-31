@@ -1,3 +1,5 @@
+package neural_network;
+
 import java.util.ArrayList;
 
 public class NeuronLayer {

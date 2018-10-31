@@ -1,6 +1,6 @@
-import org.junit.Test;
+package perceptrons;
 
-import java.lang.annotation.Annotation;
+import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 

@@ -1,9 +1,11 @@
+package neural_network;
+
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SigmoidNeuron {
 
-    private final double learningRate = 5;
+    private final double learningRate = 1;
     private ArrayList<Double> weights = new ArrayList();
     private double threshold;
     private double delta;
