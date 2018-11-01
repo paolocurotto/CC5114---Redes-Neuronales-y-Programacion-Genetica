@@ -10,8 +10,8 @@ import javafx.scene.chart.LineChart;
 
 public class GraphPane {
 
-    private static int width = 900;
-    private static int height = 800;
+    private static int width = 500;
+    private static int height = 300;
 
     private LineChart lineChartMSE;
     private XYChart.Series chartMSE = new XYChart.Series();

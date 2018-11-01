@@ -15,7 +15,7 @@ public class Main_4 extends Application {
     @Override
     public void start(Stage stage) {
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 30, 2});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 3, 2});
 
         GraphPane graph = new GraphPane();
         Scene scene = new Scene(graph.getLineChart(), Color.WHITESMOKE);
