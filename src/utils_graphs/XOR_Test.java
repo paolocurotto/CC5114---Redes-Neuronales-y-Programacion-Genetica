@@ -11,13 +11,14 @@ import javafx.stage.Stage;
 import neural_network.NeuralNetwork;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class XOR_Test extends Application {
 
     private int n_rects = 100;
-    private int width = 400;
-    private int height = 400;
+    private int width = 700;
+    private int height = 700;
     private Canvas canvas = new Canvas(width, height);
     private ArrayList<XorValues> xor_values = new ArrayList<>();
     private NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {2, 3, 2});
@@ -42,6 +43,7 @@ public class XOR_Test extends Application {
         xor_values.add(new XorValues(1, 1, 1, 0));
 
 
+
         ArrayList<Double> inputs = new ArrayList<>();
 
         new AnimationTimer() {
@@ -57,9 +59,13 @@ public class XOR_Test extends Application {
                     System.out.print("iter = " + a + ", ");
                 }
 
-                for (int b = 0; b <= 200; b++) {
-                    int r = ThreadLocalRandom.current().nextInt(0, xor_values.size());
-                    neuralNetwork.trainNetwork(xor_values.get(r).inputs, xor_values.get(r).results);
+                for (int b = 0; b <= 100; b++) {
+
+                    Collections.shuffle(xor_values);
+                    for (XorValues val : xor_values) {
+                        neuralNetwork.trainNetwork(val.inputs, val.results);
+                    }
+
                 }
 
                 int res = width / n_rects;

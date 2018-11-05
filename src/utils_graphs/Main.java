@@ -17,13 +17,8 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         NetworkPane p = new NetworkPane();
-        //Pane s = p.getPane();
-
         Pane s = p.getLayersPane();
-
         s.setPrefSize(500, 400);
-
-
         Scene scene = new Scene(s, Color.WHITESMOKE);
         stage.setTitle("Neural Network");
         stage.setScene(scene);

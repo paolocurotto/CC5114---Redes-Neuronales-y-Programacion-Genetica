@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Set of inputs and desired outputs & utility stuff
+ * Object that wraps set of inputs and desired outputs for 1 record in a data set.
+ *
+ * & utility stuff
  * */
 
 public class DataValue {
 
     public ArrayList<Double> inputs = new ArrayList<>();
     public ArrayList<Double> desiredOutputs = new ArrayList<>();
+
+    public DataValue() {
+
+    }
 
     public DataValue(ArrayList<Double> i, ArrayList<Double> o) {
         inputs = i;
@@ -31,17 +37,16 @@ public class DataValue {
 
     /***
      * Returns a normalized data set
+     *
+     *   dL = inputs' lowest value
+     *   dH = inputs' highest value
+     *   nL = normalized lowest value desired
+     *   nH = normalized highest value desired
+     *
      * */
     public static void normalizeDataset(ArrayList<DataValue> dataset) {
 
         ArrayList<DataValue> normalizedDataset = new ArrayList<>();
-
-        /*
-        *   dL = inputs' lowest value
-        *   dH = inputs' highest value
-        *   nL = normalized lowest value desired
-        *   nH = normalized highest value desired
-        */
 
         double dL = Double.MAX_VALUE;
         double dH = Double.MIN_VALUE;
@@ -57,7 +62,8 @@ public class DataValue {
 
             for (int i = 0; i < dataValue.inputs.size(); i++) {
 
-                double fx = ((double) ((dataValue.inputs.get(i) - dL) * (nH - nL)) / (dH - dL)) + nL;
+                double x = dataValue.inputs.get(i);
+                double fx = ( (double) (x - dL) * (nH - nL) / (dH - dL)) + nL;
                 dataValue.inputs.set(i, fx);
 
             }
@@ -74,7 +80,7 @@ public class DataValue {
         TRUE_POSITIVE,
         FALSE_POSITIVE,
         TRUE_NEGATIVE,
-        FALSE_NEGATIVE,
+        FALSE_NEGATIVE, TRUE_POSITIVE_HIGH_CARD, FALSE_POSITIVE_HIGH_CARD, TRUE_POSITIVE_ONE_PAIR, FALSE_POSITIVE_ONE_PAIR,
     }
 
 
@@ -100,11 +106,13 @@ public class DataValue {
                     return Prediction.TRUE_NEGATIVE;
                 }
             }
-
         }
+
 
         // Model with multiple outputs
         else if (prediction.size() > 1) {
+
+
             // Find index of highest value in prediction (= answer)
             int index = 0;
             for (int i = 1; i < desired.size(); i++) {
@@ -114,12 +122,36 @@ public class DataValue {
             }
 
             // Check if prediction was correct
+            /*
             if (desired.get(index) == 1) {
                 return Prediction.TRUE_POSITIVE;
 
             } else if (desired.get(index) == 0) {
                 return Prediction.FALSE_POSITIVE;
             }
+            */
+
+            // high card
+            if (desired.get(0) == 1) {
+                if (index == 0) {
+                    return Prediction.TRUE_POSITIVE_HIGH_CARD;
+                } else if (index == 1){
+                    return Prediction.FALSE_POSITIVE_ONE_PAIR;
+                }
+
+            // 1 pair
+            } else if (desired.get(1) == 1) {
+                if (index == 1) {
+                    return Prediction.TRUE_POSITIVE_ONE_PAIR;
+                } else if (index == 0){
+                    return Prediction.FALSE_POSITIVE_HIGH_CARD;
+                }
+
+            } else {
+                System.err.println("Error checking answer");
+            }
+
+
         }
 
         System.err.println("Error checking answer");

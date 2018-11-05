@@ -10,14 +10,19 @@ import javafx.scene.chart.LineChart;
 
 public class GraphPane {
 
-    private static int width = 500;
-    private static int height = 300;
+    private static int width = 800;
+    private static int height = 600;
 
     private LineChart lineChartMSE;
-    private XYChart.Series chartMSE = new XYChart.Series();
     private LineChart lineChartPrecision;
+
+    private XYChart.Series chartMSE = new XYChart.Series();
     private XYChart.Series chartPrecision = new XYChart.Series();
     private XYChart.Series redLine = new XYChart.Series();
+    private XYChart.Series redLine2 = new XYChart.Series();
+
+    private XYChart.Series chart_highcard = new XYChart.Series();
+    private XYChart.Series chart_onepair = new XYChart.Series();
 
     public GraphPane() {
         this(width, height);
@@ -42,16 +47,22 @@ public class GraphPane {
         lineChartPrecision.setPrefSize(w, h);
         lineChartMSE.setTitle("Mean squared error");
         lineChartPrecision.setTitle("Precision");
-        lineChartMSE.getData().addAll(chartMSE);
-        lineChartPrecision.getData().addAll(redLine, chartPrecision);
+        lineChartMSE.getData().addAll(chartMSE, redLine2);
+        //lineChartPrecision.getData().addAll(redLine, chartPrecision);
+
+        lineChartPrecision.getData().addAll(redLine, chart_highcard, chart_onepair);
+        chart_highcard.setName("High Card");
+        chart_onepair.setName("One Pair");
 
         // set colors
         Node line_mse = chartMSE.getNode().lookup(".chart-series-line");
-        Node line_p = chartPrecision.getNode().lookup(".chart-series-line");
+        //Node line_p = chartPrecision.getNode().lookup(".chart-series-line");
         Node red_line = redLine.getNode().lookup(".chart-series-line");
-        line_mse.setStyle("-fx-stroke: #0000cd;" + "-fx-stroke-width: 2px;"); // set width of line
-        line_p.setStyle("-fx-stroke: #228b22;" + "-fx-stroke-width: 2px;"); // set width of line
-        red_line.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;"); // set width of line
+        Node red_line2 = redLine2.getNode().lookup(".chart-series-line");
+        line_mse.setStyle("-fx-stroke: #0000cd;" + "-fx-stroke-width: 2px;");
+        //line_p.setStyle("-fx-stroke: #228b22;" + "-fx-stroke-width: 2px;");
+        red_line.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;");
+        red_line2.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;");
 
         // remove dots
         lineChartMSE.setCreateSymbols(false);
@@ -60,12 +71,19 @@ public class GraphPane {
     }
 
     public void addValueMSE(double x, double y) {
+        redLine2.getData().add(new XYChart.Data(x, 1));
         chartMSE.getData().add(new XYChart.Data(x, y));
     }
 
     public void addValuePrecision(double x, double y) {
         redLine.getData().add(new XYChart.Data(x, 1));
         chartPrecision.getData().add(new XYChart.Data(x, y));
+    }
+
+    public void addValuehighpair(double x, double highcard, double onepair) {
+        redLine.getData().add(new XYChart.Data(x, 1));
+        chart_highcard.getData().add(new XYChart.Data(x, highcard));
+        chart_onepair.getData().add(new XYChart.Data(x, onepair));
     }
 
     public Pane getLineChart() {
