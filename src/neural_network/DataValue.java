@@ -46,8 +46,6 @@ public class DataValue {
      * */
     public static void normalizeDataset(ArrayList<DataValue> dataset) {
 
-        ArrayList<DataValue> normalizedDataset = new ArrayList<>();
-
         double dL = Double.MAX_VALUE;
         double dH = Double.MIN_VALUE;
         double nL = 0;
@@ -122,15 +120,16 @@ public class DataValue {
             }
 
             // Check if prediction was correct
-            /*
+
             if (desired.get(index) == 1) {
                 return Prediction.TRUE_POSITIVE;
 
             } else if (desired.get(index) == 0) {
                 return Prediction.FALSE_POSITIVE;
             }
-            */
 
+
+            /*
             // high card
             if (desired.get(0) == 1) {
                 if (index == 0) {
@@ -150,7 +149,7 @@ public class DataValue {
             } else {
                 System.err.println("Error checking answer");
             }
-
+*/
 
         }
 

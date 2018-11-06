@@ -53,14 +53,6 @@ public class NeuralNetwork {
 
         // Check sizes
         for (DataValue record : dataset) {
-
-            for (double input : record.inputs) {
-                if (input < 0 || 51 < input) {
-                    System.err.println("Input not poker card");
-                    return;
-                }
-            }
-
             boolean ans = false;
             for (double output : record.desiredOutputs) {
                 if (output == 1) {
@@ -75,7 +67,6 @@ public class NeuralNetwork {
                 System.err.println("No '1' in desired outputs");
                 return;
             }
-
             if (record.inputs.size() != neuralLayers.get(0).getNeurons().get(0).getWeights().size()) {
                 System.err.println("Data set record input size != number weights per neuron first hidden layer");
                 return;
@@ -85,8 +76,6 @@ public class NeuralNetwork {
                 return;
             }
         }
-
-
 
         System.out.print("Shuffling dataset...  ");
         Collections.shuffle(dataset);
@@ -98,24 +87,25 @@ public class NeuralNetwork {
 
             System.out.print("Epoch: " + epoch);
 
-            System.out.print(", Shuffling dataset...  ");
+           // Inputs shuffle for each example in data set
             for (DataValue r : dataset) {
                 Collections.shuffle(r.inputs);
             }
+
+            // Dataset shuffle for epoch
             Collections.shuffle(dataset);
-            System.out.print("Done   ");
 
             double precision;
             double mean_squared_error = 0;
             int true_positive_count = 0;
             int false_positive_count = 0;
 
-            double precision_highcard, precision_onepair;
+            /*double precision_highcard, precision_onepair;
             int true_positive_count_highcard = 0;
             int false_positive_count_highcard = 0;
             int true_positive_count_onepair = 0;
             int false_positive_count_onepair = 0;
-            int realhigh=0, realone=0;
+            int realhigh=0, realone=0;*/
 
             // Iterate through data set
             for (DataValue data : dataset) {
@@ -145,7 +135,7 @@ public class NeuralNetwork {
 
                 // Check prediction
                 switch (checkAnswer(outputs, desiredOutputs)) {
-                    case TRUE_POSITIVE_HIGH_CARD:
+                    /*case TRUE_POSITIVE_HIGH_CARD:
                         true_positive_count_highcard++;
                         realhigh++;
                         break;
@@ -163,6 +153,14 @@ public class NeuralNetwork {
                     case FALSE_POSITIVE_ONE_PAIR:
                         false_positive_count_onepair++;
                         realhigh++;
+                        break;
+                        */
+                    case TRUE_POSITIVE:
+                        true_positive_count++;
+                        break;
+
+                    case FALSE_POSITIVE:
+                        false_positive_count++;
                         break;
                 }
 
@@ -183,9 +181,9 @@ public class NeuralNetwork {
 
             // Calculate mean squared error and precision of epoch
             mean_squared_error = mean_squared_error / dataset.size();
-            //precision = (double) true_positive_count / (true_positive_count + false_positive_count);
+            precision = (double) true_positive_count / (true_positive_count + false_positive_count);
 
-            int tothigh = true_positive_count_highcard + false_positive_count_highcard;
+            /*int tothigh = true_positive_count_highcard + false_positive_count_highcard;
             int totone = true_positive_count_onepair + false_positive_count_onepair;
             if (tothigh == 0) {
                 tothigh = 1;
@@ -198,25 +196,31 @@ public class NeuralNetwork {
 
             int tot = tothigh + totone;
             precision = (double) (true_positive_count_highcard + true_positive_count_onepair) / tot;
-
+*/
             // Add values to line charts
             if (graphPane != null) {
-                if (epoch % 2 == 0) {
+                if (epoch % 10 == 0) {
                     graphPane.addValueMSE(epoch, mean_squared_error);
-                    graphPane.addValuehighpair(epoch, precision_highcard, precision_onepair);
+                    //graphPane.addValuehighpair(epoch, precision_highcard, precision_onepair);
+                    graphPane.addValuePrecision(epoch, precision);
                 }
             }
 
-            DecimalFormat df2 = new DecimalFormat("##.####");
+            DecimalFormat df2 = new DecimalFormat("##.#####");
 
-            System.out.println(", Predicted High Card("+realhigh+")= " + tothigh + " (" + true_positive_count_highcard + " /" + false_positive_count_highcard + ")"
+            /*System.out.println(", Predicted High Card("+realhigh+")= " + tothigh + " (" + true_positive_count_highcard + " /" + false_positive_count_highcard + ")"
                     + ", Predicted One Pair("+realone+")= " + totone + " (" + true_positive_count_onepair + " /" + false_positive_count_onepair + ")"
                     + ", Total= " + tot
                     + "."
                     + " OverallPrecision: " + (df2.format(precision))
                     + ", Error: " + (df2.format(mean_squared_error)));
+            */
 
-            if (precision > 0.97) {
+            System.out.println(", OverallPrecision: " + (df2.format(precision))
+                             + ", Error: " + (df2.format(mean_squared_error))
+                             + ", FP="+false_positive_count);
+
+            if (precision > 0.99999) {
                 return;
             }
 

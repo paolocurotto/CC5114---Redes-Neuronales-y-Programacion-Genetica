@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SigmoidNeuron {
 
     //private final double learningRate = 0.01;
-    private final double learningRate = 0.01;
+    private final double learningRate = 0.2;
     private ArrayList<Double> weights = new ArrayList();
     private double threshold;
     private double delta;
@@ -15,8 +15,8 @@ public class SigmoidNeuron {
 
     public SigmoidNeuron(int n_of_weights) {
 
-        double range_w = 0.5;
-        double range_t = 0.5;
+        double range_w = 0.8;
+        double range_t = 0.1;
 
         // Set random weights
         for (int n = 0; n < n_of_weights; n++) {
@@ -33,8 +33,8 @@ public class SigmoidNeuron {
     public void feed(ArrayList<Double> inputs) {
 
         // Check sizes
-        if (inputs.size() != weights.size())
-            System.err.println("n inputs "+inputs.size()+" != n weights " + weights.size());
+        /*if (inputs.size() != weights.size())
+            System.err.println("n inputs "+inputs.size()+" != n weights " + weights.size());*/
 
         double z = 0;
         for (int i = 0; i < inputs.size(); i++) {
@@ -49,12 +49,12 @@ public class SigmoidNeuron {
 
     }
 
-    public ArrayList<Double> getWeights() { return weights; }
-    public double getLearningRate() { return  learningRate; }
-    public double getOutput() { return output; }
-    public void setOutput(double o) { this.output = o; }
-    public double getDelta() { return  delta; }
-    public void setDelta(double d) { this.delta = d; }
-    public double getBias() { return threshold; }
-    public void setBias(double b) { threshold = b; }
+    ArrayList<Double> getWeights() { return weights; }
+    double getLearningRate() { return  learningRate; }
+    double getOutput() { return output; }
+    void setOutput(double o) { this.output = o; }
+    double getDelta() { return  delta; }
+    void setDelta(double d) { this.delta = d; }
+    double getBias() { return threshold; }
+    void setBias(double b) { threshold = b; }
 }

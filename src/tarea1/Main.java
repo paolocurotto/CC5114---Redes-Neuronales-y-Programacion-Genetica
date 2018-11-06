@@ -19,14 +19,18 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 
-        int nAttributes = 5; // -> 5 cards in poker hand
+        int nAttributes = 4; // ->
         int nHidden = 100;
-        int nClasses = 2; // -> 10 possible poker hand rankings
+        int nClasses = 3; // ->
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {nAttributes, 30, nClasses});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {nAttributes, 25, nClasses});
 
-        ArrayList<DataValue> pokerTrainingSet = DatasetParser.parsePokerDataset("hands_training.txt");
-        //ArrayList<DataValue> pokerTrainingSet = DatasetParser.parsePoker3Dataset("hands_testing.txt");
+        //ArrayList<DataValue> trainingSet = DatasetParserPokerHands.parseDataset("hands_training.txt");
+        //ArrayList<DataValue> pokerTrainingSet = DatasetParserPokerHands.parseDataset("hands_testing.txt");
+
+        //ArrayList<DataValue> trainingSet = DatasetParserForests.parseDataset("training.csv");
+
+        ArrayList<DataValue> trainingSet = DatasetParserIris.parseDataset("iris.txt");
 
 
         GraphPane graph = new GraphPane();
@@ -36,7 +40,7 @@ public class Main extends Application {
         stage.show();
 
 
-        neuralNetwork.trainNetworkWithEpochs(pokerTrainingSet, 100000, graph);
+        neuralNetwork.trainNetworkWithEpochs(trainingSet, 100000, graph);
 
     }
 }

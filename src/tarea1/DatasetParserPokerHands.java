@@ -9,27 +9,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-public class DatasetParser {
+public class DatasetParserPokerHands {
 
     public static void main(String[] args) {
 
-        DatasetParser dataparser = new DatasetParser();
+        DatasetParserPokerHands dataparser = new DatasetParserPokerHands();
 
     }
 
-    public DatasetParser() {
+    public DatasetParserPokerHands() {
     }
 
     /**
      * Returns list of DataValue items for the poker hands data set
      */
-    public static ArrayList<DataValue> parsePokerDataset(String fileName) {
+    public static ArrayList<DataValue> parseDataset(String fileName) {
 
         ArrayList<DataValue> dataset = new ArrayList<>();
 
         String csvFile = "resources/dataset_poker_hands/" + fileName;
         String line;
-        int i = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
@@ -41,7 +40,6 @@ public class DatasetParser {
                     continue;
 
                 DataValue dataValue = new DataValue();
-
 
                 // Add inputs of the record to dataValue
                 for (int c = 0; c < record.length - 1; c += 2) {
@@ -60,7 +58,7 @@ public class DatasetParser {
                 }*/
 
                 // Add output of the record to dataValue
-                int pokerHand = Integer.parseInt(record[10]);
+                int pokerHand = Integer.parseInt(record[10]); //  [0: 'High card', 1: 'One pair']
 
                 dataValue.desiredOutputs = new ArrayList<Double>(Collections.<Double>nCopies(2, (double) 0));
                 dataValue.desiredOutputs.set(pokerHand, (double) 1);
@@ -79,12 +77,11 @@ public class DatasetParser {
                     itr.remove();
                     nhighremoved++;
                 }
-                if (nhighremoved == 1894) {
+                if (nhighremoved == 1894) { // there are 1894 more 'high card' in data set than '1 pair'
                     break;
                 }
 
             }
-
 
             return dataset;
 

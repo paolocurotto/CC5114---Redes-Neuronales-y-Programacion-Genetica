@@ -10,7 +10,6 @@ public class NeuronLayer {
 
 
     public NeuronLayer(int n_neurons, int n_weights_per_neuron) {
-
         for (int n = 0; n < n_neurons; n++) {
             neurons.add(new SigmoidNeuron(n_weights_per_neuron));
         }
@@ -85,8 +84,8 @@ public class NeuronLayer {
         for (SigmoidNeuron neuron : this.neurons) {
 
             // Check sizes
-            if (neuron.getWeights().size() != inputs.size())
-                System.err.println("n weights neuron="+neuron.getWeights().size() + " != n inputs="+ inputs.size());
+            /*if (neuron.getWeights().size() != inputs.size())
+                System.err.println("n weights neuron="+neuron.getWeights().size() + " != n inputs="+ inputs.size());*/
 
             // Update each weight
             for (int n = 0; n < neuron.getWeights().size(); n++) {
@@ -112,8 +111,8 @@ public class NeuronLayer {
         return o;
     }
 
-    public ArrayList<SigmoidNeuron> getNeurons() { return this.neurons; }
-    public void setNextLayer(NeuronLayer neuronLayer) { this.nextLayer = neuronLayer; }
-    public void setPreviousLayer(NeuronLayer neuronLayer) { this.previousLayer = neuronLayer; }
+    ArrayList<SigmoidNeuron> getNeurons() { return this.neurons; }
+    void setNextLayer(NeuronLayer neuronLayer) { this.nextLayer = neuronLayer; }
+    void setPreviousLayer(NeuronLayer neuronLayer) { this.previousLayer = neuronLayer; }
 
 }
