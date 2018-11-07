@@ -48,19 +48,19 @@ public class GraphPane {
         lineChartMSE.setTitle("Mean squared error");
         lineChartPrecision.setTitle("Precision");
         lineChartMSE.getData().addAll(chartMSE, redLine2);
-        //lineChartPrecision.getData().addAll(redLine, chartPrecision);
+        lineChartPrecision.getData().addAll(redLine, chartPrecision);
 
-        lineChartPrecision.getData().addAll(redLine, chart_highcard, chart_onepair);
+        //lineChartPrecision.getData().addAll(redLine, chart_highcard, chart_onepair);
         chart_highcard.setName("High Card");
         chart_onepair.setName("One Pair");
 
         // set colors
         Node line_mse = chartMSE.getNode().lookup(".chart-series-line");
-        //Node line_p = chartPrecision.getNode().lookup(".chart-series-line");
+        Node line_p = chartPrecision.getNode().lookup(".chart-series-line");
         Node red_line = redLine.getNode().lookup(".chart-series-line");
         Node red_line2 = redLine2.getNode().lookup(".chart-series-line");
         line_mse.setStyle("-fx-stroke: #0000cd;" + "-fx-stroke-width: 2px;");
-        //line_p.setStyle("-fx-stroke: #228b22;" + "-fx-stroke-width: 2px;");
+        line_p.setStyle("-fx-stroke: #228b22;" + "-fx-stroke-width: 2px;");
         red_line.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;");
         red_line2.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;");
 

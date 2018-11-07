@@ -18,19 +18,15 @@ public class DataValue {
 
     }
 
-    public DataValue(ArrayList<Double> i, ArrayList<Double> o) {
-        inputs = i;
-        desiredOutputs = o;
-    }
 
     public DataValue(double[] i, double[] o) {
 
-        for (int iter = 0; iter < i.length; iter++) {
-            inputs.add(i[iter]);
+        for (double anI : i) {
+            inputs.add(anI);
         }
 
-        for (int iter = 0; iter < o.length; iter++) {
-            desiredOutputs.add(o[iter]);
+        for (double anO : o) {
+            desiredOutputs.add(anO);
         }
 
     }
@@ -71,16 +67,16 @@ public class DataValue {
 
 
     /**
-     * Check prediction of the neural network
+     * Check prediction of the neural network comparing output with desired output
+     *
      * */
 
     enum Prediction {
         TRUE_POSITIVE,
         FALSE_POSITIVE,
         TRUE_NEGATIVE,
-        FALSE_NEGATIVE, TRUE_POSITIVE_HIGH_CARD, FALSE_POSITIVE_HIGH_CARD, TRUE_POSITIVE_ONE_PAIR, FALSE_POSITIVE_ONE_PAIR,
+        FALSE_NEGATIVE,
     }
-
 
     public static Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
 
@@ -110,7 +106,6 @@ public class DataValue {
         // Model with multiple outputs
         else if (prediction.size() > 1) {
 
-
             // Find index of highest value in prediction (= answer)
             int index = 0;
             for (int i = 1; i < desired.size(); i++) {
@@ -120,42 +115,57 @@ public class DataValue {
             }
 
             // Check if prediction was correct
-
             if (desired.get(index) == 1) {
                 return Prediction.TRUE_POSITIVE;
 
             } else if (desired.get(index) == 0) {
                 return Prediction.FALSE_POSITIVE;
             }
-
-
-            /*
-            // high card
-            if (desired.get(0) == 1) {
-                if (index == 0) {
-                    return Prediction.TRUE_POSITIVE_HIGH_CARD;
-                } else if (index == 1){
-                    return Prediction.FALSE_POSITIVE_ONE_PAIR;
-                }
-
-            // 1 pair
-            } else if (desired.get(1) == 1) {
-                if (index == 1) {
-                    return Prediction.TRUE_POSITIVE_ONE_PAIR;
-                } else if (index == 0){
-                    return Prediction.FALSE_POSITIVE_HIGH_CARD;
-                }
-
-            } else {
-                System.err.println("Error checking answer");
-            }
-*/
-
         }
 
         System.err.println("Error checking answer");
         return null;
 
+    }
+
+    /**
+     *  Data set and neural network integrity validation before running training
+     *
+     *  If returns true is okay
+     * */
+
+    public static boolean checkDataset(ArrayList<DataValue> dataset, NeuralNetwork neuralNetwork) {
+
+        for (DataValue record : dataset) {
+
+            // Check outputs
+            boolean check_1 = false;
+            for (double output : record.desiredOutputs) {
+                if (output == 1) {
+                    if (check_1) {
+                        System.err.println("More than one '1' in desired outputs");
+                        return false;
+                    }
+                    check_1 = true;
+                }
+            }
+            if (!check_1) {
+                System.err.println("No '1' in desired outputs");
+                return false;
+            }
+
+            // Check sizes
+            if (record.inputs.size() != neuralNetwork.neuralLayers.get(0).getNeurons().get(0).getWeights().size()) {
+                System.err.println("Data set record input size != number weights per neuron first hidden layer");
+                return false;
+            }
+            else if (record.desiredOutputs.size() != neuralNetwork.neuralLayers.get(neuralNetwork.neuralLayers.size() - 1).getNeurons().size()) {
+                System.err.println("Data set record desired outputs size != n output neurons");
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
