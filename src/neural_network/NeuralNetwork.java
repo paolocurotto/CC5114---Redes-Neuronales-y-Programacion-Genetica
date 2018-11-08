@@ -46,9 +46,10 @@ public class NeuralNetwork {
     }
 
 
-    public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, int nOfEpochs, GraphPane graphPane) {
+    public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, ArrayList<DataValue> testset, int nOfEpochs, GraphPane graphPane) {
 
         double precision;
+        double testset_precision;
         double epoch_squared_error;
         double mean_squared_error;
         int true_positive_count;
@@ -113,13 +114,15 @@ public class NeuralNetwork {
             // Calculate mean squared error and precision of epoch
             mean_squared_error = epoch_squared_error / dataset.size();
             precision = (double) true_positive_count / (true_positive_count + false_positive_count);
+            testset_precision = testing(testset);
 
 
             // Add values to line charts
             if (graphPane != null) {
-                if (epoch % 1 == 0 || precision > 0.99999) {
+                if (epoch % 5 == 0 || precision > 0.99999) {
                     graphPane.addValueMSE(epoch, mean_squared_error);
                     graphPane.addValuePrecision(epoch, precision);
+                    graphPane.addValueTesting(epoch, testset_precision);
                 }
             }
 
@@ -127,19 +130,16 @@ public class NeuralNetwork {
             DecimalFormat df2 = new DecimalFormat("##.#####");
             System.out.println(", Precision: " + (df2.format(precision))
                              + ", Error: " + (df2.format(mean_squared_error))
-                             + ", FP="+false_positive_count);
+                             + ", Test Precision: " + testset_precision);
 
-            if (precision > 0.99999 || false_positive_count < 2) {
-                return;
-            }
+
 
         }
 
     }
 
-    public void testing(ArrayList<DataValue> testingSet) {
+    public double testing(ArrayList<DataValue> testingSet) {
 
-        double epoch_squared_error = 0;
         double true_positive_count = 0;
         double false_positive_count = 0;
         double precision;
@@ -149,10 +149,6 @@ public class NeuralNetwork {
 
             // Evaluate
             ArrayList<Double> outputs = evaluate(datavalue.inputs);
-
-            /*
-            * Calculate Info
-            * */
 
             // Check prediction
             switch (checkAnswer(outputs, datavalue.desiredOutputs)) {
@@ -167,15 +163,7 @@ public class NeuralNetwork {
         }
 
         precision = (double) true_positive_count / (true_positive_count + false_positive_count);
-
-        System.out.println("");
-        System.out.print("TP: " + true_positive_count + ", FP: " + false_positive_count);
-
-
-        // Print metrics
-        DecimalFormat df2 = new DecimalFormat("##.#####");
-        System.out.println(", Precision: " + (df2.format(precision)));
-
+        return precision;
     }
 
 }

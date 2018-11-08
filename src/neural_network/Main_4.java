@@ -29,7 +29,7 @@ public class Main_4 extends Application {
         dataset.add(new DataValue(new double[] {50, 0}, new double[] {0, 1}));
         dataset.add(new DataValue(new double[] {50, 50}, new double[] {1, 0}));
 
-        neuralNetwork.trainNetworkWithEpochs(dataset, 2000, graph);
+        neuralNetwork.trainNetworkWithEpochs(dataset, null, 2000, graph);
 
     }
 }
