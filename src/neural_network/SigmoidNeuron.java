@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SigmoidNeuron {
 
-    private double learningRate = 0.01;
+    private double learningRate = 0.05;
     private ArrayList<Double> weights = new ArrayList<>();
     private double threshold;
     private double delta;

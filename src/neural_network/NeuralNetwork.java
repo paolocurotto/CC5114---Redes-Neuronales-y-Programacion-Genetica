@@ -1,11 +1,15 @@
 package neural_network;
 
 import utils_graphs.GraphPane;
+
+import javax.xml.crypto.Data;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static neural_network.DataValue.*;
+import static neural_network.DataExample.*;
+import static neural_network.Dataset.Prediction.FALSE_POSITIVE;
+import static neural_network.Dataset.Prediction.TRUE_POSITIVE;
 
 public class NeuralNetwork {
 
@@ -25,16 +29,16 @@ public class NeuralNetwork {
     }
 
     // Backpropagation algorithm
-    public void trainNetwork(ArrayList<Double> inputs, ArrayList<Double> expectedOutputs) {
+    public void trainNetwork(DataExample example) {
 
         // Start forward feeding
-        neuralLayers.get(0).feedLayer(inputs);
+        neuralLayers.get(0).feedLayer(example.inputs);
 
         // Start backward propagation
-        neuralLayers.get(neuralLayers.size() - 1).backwardPropagate(expectedOutputs);
+        neuralLayers.get(neuralLayers.size() - 1).backwardPropagate(example.desiredOutputs);
 
         // Start weights update
-        neuralLayers.get(0).updateWeights(inputs);
+        neuralLayers.get(0).updateWeights(example.inputs);
     }
 
     // Evaluation of a single input
@@ -43,17 +47,16 @@ public class NeuralNetwork {
         return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
     }
 
-
     // Main method
-    public void trainNetworkWithEpochs(ArrayList<DataValue> dataset, ArrayList<DataValue> testset, int nOfEpochs, GraphPane graphPane) {
+    public void trainNetworkWithEpochs(Dataset training_set, Dataset testing_set, int nOfEpochs, GraphPane graphPane) {
 
         // Check data set integrity and sizes
-        if (!checkDataset(dataset, this)) {
+        if (!training_set.checkDataset(this) || !testing_set.checkDataset(this)) {
             return;
         }
 
         // Normalize data set
-        normalizeDataset(dataset);
+        training_set.normalize();
 
         // Iterate number of epochs times
         for (int epoch = 0; epoch < nOfEpochs; epoch++) {
@@ -64,19 +67,19 @@ public class NeuralNetwork {
             double false_positive_count = 0;
 
             // Dataset shuffle for epoch
-            Collections.shuffle(dataset);
+            training_set.shuffle();
 
             // Iterate over dataset examples
-            for (DataValue example : dataset) {
+            for (DataExample example : training_set.dataset) {
 
                 // Train
-                trainNetwork(example.inputs, example.desiredOutputs);
+                trainNetwork(example);
 
                 // Get outputs
                 ArrayList<Double> outputs = neuralLayers.get(neuralLayers.size() - 1).getOutputs();
 
                 // Check prediction
-                switch (checkAnswer(outputs, example.desiredOutputs)) {
+                switch (training_set.checkAnswer(outputs, example.desiredOutputs)) {
                     case TRUE_POSITIVE:
                         true_positive_count++;
                         break;
@@ -98,9 +101,9 @@ public class NeuralNetwork {
              * */
 
             // Calculate mean squared error and precision of epoch and testing set
-            double mean_squared_error = epoch_squared_error / dataset.size();
+            double mean_squared_error = epoch_squared_error / training_set.dataset.size();
             double precision = (double) true_positive_count / (true_positive_count + false_positive_count);
-            double testset_precision = testDataset(testset);
+            double testset_precision = testNeuralNetwork(testing_set);
 
             // Add values to line charts
             if (graphPane != null) {
@@ -121,27 +124,22 @@ public class NeuralNetwork {
     }
 
     // Returns precision of testing set
-    private double testDataset(ArrayList<DataValue> testingSet) {
-
-        // Check data set
-        if (!checkDataset(testingSet, this)) {
-            return -1;
-        }
+    private double testNeuralNetwork(Dataset testingSet) {
 
         // Normalize data set
-        normalizeDataset(testingSet);
+        testingSet.normalize();
 
         double true_positive_count = 0;
         double false_positive_count = 0;
 
         // Iterate over testing dataset
-        for (DataValue datavalue : testingSet) {
+        for (DataExample dataExample : testingSet.dataset) {
 
             // Evaluate
-            ArrayList<Double> outputs = evaluate(datavalue.inputs);
+            ArrayList<Double> outputs = evaluate(dataExample.inputs);
 
             // Check prediction
-            switch (checkAnswer(outputs, datavalue.desiredOutputs)) {
+            switch (testingSet.checkAnswer(outputs, dataExample.desiredOutputs)) {
                 case TRUE_POSITIVE:
                     true_positive_count++;
                     break;

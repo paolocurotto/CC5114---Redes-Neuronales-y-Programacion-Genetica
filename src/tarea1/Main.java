@@ -4,7 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import neural_network.DataValue;
+import neural_network.DataExample;
+import neural_network.Dataset;
 import neural_network.NeuralNetwork;
 import utils_graphs.GraphPane;
 
@@ -22,12 +23,12 @@ public class Main extends Application {
 
         NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {
                 9,  // Number of inputs
-                9,  // Hidden layer
+                15,  // Hidden layer
                 4,  // Output layer
         });
 
-        ArrayList<DataValue> trainingSet = DatasetParserForests.parseDataset("training.csv");
-        ArrayList<DataValue> testingSet = DatasetParserForests.parseDataset("testing.csv");
+        Dataset trainingSet = DatasetParserForests.parseDataset("training.csv");
+        Dataset testingSet = DatasetParserForests.parseDataset("testing.csv");
 
         GraphPane graph = new GraphPane();
         Scene scene = new Scene(graph.getLineChart(), Color.WHITESMOKE);
@@ -35,8 +36,8 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-        Collections.shuffle(trainingSet);
-        Collections.shuffle(testingSet);
+        trainingSet.shuffle();
+        testingSet.shuffle();
 
         neuralNetwork.trainNetworkWithEpochs(trainingSet, testingSet, 8000, graph);
     }

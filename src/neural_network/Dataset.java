@@ -4,32 +4,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Object that wraps set of inputs and desired outputs for 1 record in a data set.
+ * Object representing dataset of a neural network
  *
- * & utility methods: normalize dataset, check prediction true/false positive value, dataset integrity test
- * */
+ */
+public class Dataset {
 
-public class DataValue {
+    public ArrayList<DataExample> dataset = new ArrayList<>();
 
-    public ArrayList<Double> inputs = new ArrayList<>();
-    public ArrayList<Double> desiredOutputs = new ArrayList<>();
-
-    public DataValue() {
+    public Dataset() {
 
     }
 
-
-    DataValue(double[] ins, double[] outs) {
-        for (double i : ins) {
-            inputs.add(i);
-        }
-
-        for (double o : outs) {
-            desiredOutputs.add(o);
-        }
+    public void shuffle() {
+        Collections.shuffle(dataset);
     }
 
-    /***
+
+    /**
      * Modifies the dataset to the normalized version
      *
      *   dL = inputs' lowest value
@@ -37,23 +28,22 @@ public class DataValue {
      *   nL = normalized lowest value desired
      *   nH = normalized highest value desired
      *
-     * */
-    static void normalizeDataset(ArrayList<DataValue> dataset) {
-
+     */
+    public void normalize() {
         double dL = Double.MAX_VALUE;
         double dH = Double.MIN_VALUE;
         double nL = 0;
         double nH = 1;
 
-        for (DataValue dataValue : dataset) {
-            dL = Math.min(dL, Collections.min(dataValue.inputs));
-            dH = Math.max(dH, Collections.max(dataValue.inputs));
+        for (DataExample dataExample : dataset) {
+            dL = Math.min(dL, Collections.min(dataExample.inputs));
+            dH = Math.max(dH, Collections.max(dataExample.inputs));
         }
 
-        for (DataValue dataValue : dataset) {
-            for (int i = 0; i < dataValue.inputs.size(); i++) {
-                double fx = (dataValue.inputs.get(i) - dL) * (nH - nL) / (dH - dL) + nL;
-                dataValue.inputs.set(i, fx);
+        for (DataExample dataExample : dataset) {
+            for (int i = 0; i < dataExample.inputs.size(); i++) {
+                double fx = (dataExample.inputs.get(i) - dL) * (nH - nL) / (dH - dL) + nL;
+                dataExample.inputs.set(i, fx);
             }
         }
     }
@@ -71,7 +61,7 @@ public class DataValue {
         FALSE_NEGATIVE,
     }
 
-    static Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
+    public Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
 
         // Model with 1 output
         if (prediction.size() == 1) {
@@ -94,7 +84,6 @@ public class DataValue {
                 }
             }
         }
-
 
         // Model with multiple outputs
         else if (prediction.size() > 1) {
@@ -120,17 +109,16 @@ public class DataValue {
         return null;
     }
 
+
     /**
      *  Dataset and neural network integrity validation before running training
      *
      *  Returning true if okay
-     * */
+     */
+    public boolean checkDataset(NeuralNetwork neuralNetwork) {
 
-    static boolean checkDataset(ArrayList<DataValue> dataset, NeuralNetwork neuralNetwork) {
-
-        for (DataValue record : dataset) {
-
-            // Check outputs
+        for (DataExample record : dataset) {
+            // Checks outputs
             boolean check_1 = false;
             for (double output : record.desiredOutputs) {
                 if (output == 1) {
@@ -146,7 +134,7 @@ public class DataValue {
                 return false;
             }
 
-            // Check sizes
+            // Checks sizes
             if (record.inputs.size() != neuralNetwork.neuralLayers.get(0).getNeurons().get(0).getWeights().size()) {
                 System.err.println("Data set record input size != number weights per neuron first hidden layer");
                 return false;
@@ -156,7 +144,6 @@ public class DataValue {
                 return false;
             }
         }
-
         return true;
     }
 

@@ -23,11 +23,13 @@ public class Main_4 extends Application {
         stage.setScene(scene);
         stage.show();
 
-        ArrayList<DataValue> dataset = new ArrayList<>();
-        dataset.add(new DataValue(new double[] {0, 0}, new double[] {1, 0}));
-        dataset.add(new DataValue(new double[] {0, 50}, new double[] {0, 1}));
-        dataset.add(new DataValue(new double[] {50, 0}, new double[] {0, 1}));
-        dataset.add(new DataValue(new double[] {50, 50}, new double[] {1, 0}));
+        ArrayList<DataExample> examples = new ArrayList<>();
+        examples.add(new DataExample(new double[] {0, 0}, new double[] {1, 0}));
+        examples.add(new DataExample(new double[] {0, 50}, new double[] {0, 1}));
+        examples.add(new DataExample(new double[] {50, 0}, new double[] {0, 1}));
+        examples.add(new DataExample(new double[] {50, 50}, new double[] {1, 0}));
+        Dataset dataset = new Dataset();
+        dataset.dataset = examples;
 
         neuralNetwork.trainNetworkWithEpochs(dataset, null, 2000, graph);
 

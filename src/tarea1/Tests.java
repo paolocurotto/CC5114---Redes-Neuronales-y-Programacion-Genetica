@@ -1,5 +1,6 @@
 package tarea1;
 
+import neural_network.DataExample;
 import neural_network.NeuralNetwork;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,12 +38,8 @@ public class Tests {
 
     @Test
     public void neuralNetworkTest_1() {
-        ArrayList<Double> input_1 = new ArrayList<>();
-        input_1.add((double) 1);
-        input_1.add((double) 1);
-        ArrayList<Double> desired_1 = new ArrayList<>();
-        desired_1.add((double) 1);
-        neuralNetwork_1.trainNetwork(input_1, desired_1);
+
+        neuralNetwork_1.trainNetwork(new DataExample(new double[] {1, 1}, new double[] {1}));
 
         // Test neuron 1
         assertEquals(0.502101508999489, neuralNetwork_1.neuralLayers.get(0).neurons.get(0).getBias()); // Test bias
@@ -96,13 +93,8 @@ public class Tests {
 
     @Test
     public void neuralNetworkTest_2() {
-        ArrayList<Double> input_2 = new ArrayList<>();
-        input_2.add((double) 1);
-        input_2.add((double) 1);
-        ArrayList<Double> desired_2 = new ArrayList<>();
-        desired_2.add((double) 1);
-        desired_2.add((double) 1);
-        neuralNetwork_2.trainNetwork(input_2, desired_2);
+
+        neuralNetwork_2.trainNetwork(new DataExample(new double[] {1, 1}, new double[] {1, 1}));
 
         // Test neuron 1
         assertEquals(0.5025104485493278, neuralNetwork_2.neuralLayers.get(0).neurons.get(0).getBias()); // Test bias

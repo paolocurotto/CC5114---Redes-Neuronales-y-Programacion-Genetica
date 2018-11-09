@@ -1,22 +1,22 @@
 package tarea1;
 
-import neural_network.DataValue;
+import neural_network.DataExample;
+import neural_network.Dataset;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
 public class DatasetParserForests {
 
     /**
-     * Returns list of DataValue items for the forests types data set
+     * Returns list of DataExample items for the forests types data set
      */
-    public static ArrayList<DataValue> parseDataset(String fileName) {
+    public static Dataset parseDataset(String fileName) {
 
-        ArrayList<DataValue> dataset = new ArrayList<>();
+        Dataset datasetForests = new Dataset();
 
         String csvFile = "resources/forests/" + fileName;
         String line;
@@ -34,15 +34,15 @@ public class DatasetParserForests {
                 // use comma as separator
                 String[] record = line.split(",");
 
-                DataValue dataValue = new DataValue();
+                DataExample dataExample = new DataExample();
 
-                // Add inputs of the record to dataValue
+                // Add inputs of the record to dataExample
                 for (int c = 1; c < 10; c++) {
                     double btype = Double.parseDouble(record[c]);
-                    dataValue.inputs.add(btype);
+                    dataExample.inputs.add(btype);
                 }
 
-                // Add output of the record to dataValue
+                // Add output of the record to dataExample
                 String forest_type = record[0];
 
                 //**
@@ -73,15 +73,15 @@ public class DatasetParserForests {
                         return null;
                 }
 
-                dataValue.desiredOutputs = new ArrayList<Double>(Collections.<Double>nCopies(4, (double) 0));
-                dataValue.desiredOutputs.set(typeindex, (double) 1);
+                dataExample.desiredOutputs = new ArrayList<Double>(Collections.<Double>nCopies(4, (double) 0));
+                dataExample.desiredOutputs.set(typeindex, (double) 1);
 
-                // Add dataValue to dataset
-                dataset.add(dataValue);
+                // Add dataExample to dataset
+                datasetForests.dataset.add(dataExample);
 
             }
 
-            return dataset;
+            return datasetForests;
 
         } catch (IOException e) {
             e.printStackTrace();

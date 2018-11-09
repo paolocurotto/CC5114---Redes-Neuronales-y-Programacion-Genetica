@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import neural_network.DataExample;
 import neural_network.NeuralNetwork;
 
 import java.util.ArrayList;
@@ -63,7 +64,10 @@ public class XOR_Test extends Application {
 
                     Collections.shuffle(xor_values);
                     for (XorValues val : xor_values) {
-                        neuralNetwork.trainNetwork(val.inputs, val.results);
+                        DataExample d = new DataExample();
+                        d.inputs = val.inputs;
+                        d.desiredOutputs = val.results;
+                        neuralNetwork.trainNetwork(d);
                     }
 
                 }
