@@ -26,6 +26,7 @@ public class DatasetParserForests {
 
             while ((line = br.readLine()) != null) {
 
+                // Skip definitions line
                 if(i++ == 0) {
                     continue;
                 }
@@ -50,17 +51,26 @@ public class DatasetParserForests {
 
                 int typeindex;
 
-                if (forest_type.equals("s ")) {
-                    typeindex = 0;
-                } else if (forest_type.equals("d ")) {
-                    typeindex = 1;
-                } else if (forest_type.equals("h ")) {
-                    typeindex = 2;
-                } else if (forest_type.equals("o ")) {
-                    typeindex = 3;
-                } else {
-                    System.err.println("Class not identified while parsing: -" + forest_type + "-");
-                    return null;
+                switch (forest_type) {
+                    case "s ":
+                        typeindex = 0;
+                        break;
+
+                    case "d ":
+                        typeindex = 1;
+                        break;
+
+                    case "h ":
+                        typeindex = 2;
+                        break;
+
+                    case "o ":
+                        typeindex = 3;
+                        break;
+
+                    default:
+                        System.err.println("Class not identified while parsing: -" + forest_type + "-");
+                        return null;
                 }
 
                 dataValue.desiredOutputs = new ArrayList<Double>(Collections.<Double>nCopies(4, (double) 0));

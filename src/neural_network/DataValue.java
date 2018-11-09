@@ -6,7 +6,7 @@ import java.util.Collections;
 /**
  * Object that wraps set of inputs and desired outputs for 1 record in a data set.
  *
- * & utility stuff
+ * & utility methods: normalize dataset, check prediction true/false positive value, dataset integrity test
  * */
 
 public class DataValue {
@@ -19,20 +19,18 @@ public class DataValue {
     }
 
 
-    public DataValue(double[] i, double[] o) {
-
-        for (double anI : i) {
-            inputs.add(anI);
+    DataValue(double[] ins, double[] outs) {
+        for (double i : ins) {
+            inputs.add(i);
         }
 
-        for (double anO : o) {
-            desiredOutputs.add(anO);
+        for (double o : outs) {
+            desiredOutputs.add(o);
         }
-
     }
 
     /***
-     * Returns a normalized data set
+     * Modifies the dataset to the normalized version
      *
      *   dL = inputs' lowest value
      *   dH = inputs' highest value
@@ -40,7 +38,7 @@ public class DataValue {
      *   nH = normalized highest value desired
      *
      * */
-    public static void normalizeDataset(ArrayList<DataValue> dataset) {
+    static void normalizeDataset(ArrayList<DataValue> dataset) {
 
         double dL = Double.MAX_VALUE;
         double dH = Double.MIN_VALUE;
@@ -53,21 +51,16 @@ public class DataValue {
         }
 
         for (DataValue dataValue : dataset) {
-
             for (int i = 0; i < dataValue.inputs.size(); i++) {
-
-                double x = dataValue.inputs.get(i);
-                double fx = ( (double) (x - dL) * (nH - nL) / (dH - dL)) + nL;
+                double fx = (dataValue.inputs.get(i) - dL) * (nH - nL) / (dH - dL) + nL;
                 dataValue.inputs.set(i, fx);
-
             }
         }
-
     }
 
 
     /**
-     * Check prediction of the neural network comparing output with desired output
+     * Checks prediction of the neural network comparing output with desired output
      *
      * */
 
@@ -78,7 +71,7 @@ public class DataValue {
         FALSE_NEGATIVE,
     }
 
-    public static Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
+    static Prediction checkAnswer(ArrayList<Double> prediction, ArrayList<Double> desired) {
 
         // Model with 1 output
         if (prediction.size() == 1) {
@@ -125,16 +118,15 @@ public class DataValue {
 
         System.err.println("Error checking answer");
         return null;
-
     }
 
     /**
-     *  Data set and neural network integrity validation before running training
+     *  Dataset and neural network integrity validation before running training
      *
-     *  If returns true is okay
+     *  Returning true if okay
      * */
 
-    public static boolean checkDataset(ArrayList<DataValue> dataset, NeuralNetwork neuralNetwork) {
+    static boolean checkDataset(ArrayList<DataValue> dataset, NeuralNetwork neuralNetwork) {
 
         for (DataValue record : dataset) {
 

@@ -7,16 +7,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.chart.LineChart;
 
+/**
+ * Class to create line charts for MSE, training set precision and testing set precision in a javafx pane
+ *
+ */
 
 public class GraphPane {
 
     private static int width = 400;
     private static int height = 500;
-
     private LineChart lineChartMSE;
     private LineChart lineChartPrecision;
     private LineChart lineChartTesting;
-
     private XYChart.Series seriesMSE = new XYChart.Series();
     private XYChart.Series seriesPrecision = new XYChart.Series();
     private XYChart.Series redLine = new XYChart.Series();
@@ -30,15 +32,13 @@ public class GraphPane {
     }
 
     GraphPane(int w, int h) {
-
-        // defining axes
+        // Defining axes
         NumberAxis xAxis_epoch_mse = new NumberAxis();
         NumberAxis xAxis_epoch_p = new NumberAxis();
         NumberAxis xAxis_epoch_testing = new NumberAxis();
         NumberAxis yAxis_mse = new NumberAxis();
         NumberAxis yAxis_precision = new NumberAxis();
         NumberAxis yAxis_testing = new NumberAxis();
-
         xAxis_epoch_mse.setLabel("Epochs");
         xAxis_epoch_p.setLabel("Epochs");
         xAxis_epoch_testing.setLabel("Epochs");
@@ -46,7 +46,7 @@ public class GraphPane {
         yAxis_precision.setLabel("Precision");
         yAxis_testing.setLabel("Precision Test dataset");
 
-        // creating charts
+        // Create charts
         lineChartMSE = new LineChart(xAxis_epoch_mse, yAxis_mse);
         lineChartPrecision = new LineChart(xAxis_epoch_p, yAxis_precision);
         lineChartTesting = new LineChart(xAxis_epoch_testing, yAxis_testing);
@@ -60,7 +60,7 @@ public class GraphPane {
         lineChartPrecision.getData().addAll(redLine, seriesPrecision);
         lineChartTesting.getData().addAll(redLine3, seriesTesting);
 
-        // set colors
+        // Set colors
         Node line_mse = seriesMSE.getNode().lookup(".chart-series-line");
         Node line_p = seriesPrecision.getNode().lookup(".chart-series-line");
         Node line_test = seriesTesting.getNode().lookup(".chart-series-line");
@@ -74,29 +74,31 @@ public class GraphPane {
         red_line2.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;");
         red_line3.setStyle("-fx-stroke: #ff0000;" + "-fx-stroke-width: 0.4px;");
 
-        // remove dots
+        // Remove dots
         lineChartMSE.setCreateSymbols(false);
         lineChartPrecision.setCreateSymbols(false);
         lineChartTesting.setCreateSymbols(false);
-
     }
 
+    // Adds value to mse line chart
     public void addValueMSE(double x, double y) {
         redLine2.getData().add(new XYChart.Data(x, 1));
         seriesMSE.getData().add(new XYChart.Data(x, y));
     }
 
+    // Adds value to training precision line chart
     public void addValuePrecision(double x, double y) {
         redLine.getData().add(new XYChart.Data(x, 1));
         seriesPrecision.getData().add(new XYChart.Data(x, y));
     }
 
+    // Adds value to testing precision line chart
     public void addValueTesting(double x, double y) {
         redLine3.getData().add(new XYChart.Data(x, 1));
         seriesTesting.getData().add(new XYChart.Data(x, y));
     }
 
-
+    // Returns javafx pane of the charts
     public Pane getLineChart() {
         return new HBox(lineChartMSE, lineChartPrecision, lineChartTesting);
     }
