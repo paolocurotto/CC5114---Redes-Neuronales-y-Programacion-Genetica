@@ -47,7 +47,7 @@ public class NeuralNetwork {
         return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
     }
 
-    // Main method
+    // Main_Tarea method
     public void trainNetworkWithEpochs(Dataset training_set, Dataset testing_set, int nOfEpochs, GraphPane graphPane) {
 
         // Check data set integrity and sizes
@@ -57,6 +57,9 @@ public class NeuralNetwork {
 
         // Normalize data set
         training_set.normalize();
+
+        double epochs_since_last_update = 0;
+        double max_testset_precision = 0;
 
         // Iterate number of epochs times
         for (int epoch = 0; epoch < nOfEpochs; epoch++) {
@@ -70,7 +73,7 @@ public class NeuralNetwork {
             training_set.shuffle();
 
             // Iterate over dataset examples
-            for (DataExample example : training_set.dataset) {
+            for (DataExample example : training_set.examples) {
 
                 // Train
                 trainNetwork(example);
@@ -101,24 +104,36 @@ public class NeuralNetwork {
              * */
 
             // Calculate mean squared error and precision of epoch and testing set
-            double mean_squared_error = epoch_squared_error / training_set.dataset.size();
+            double mean_squared_error = epoch_squared_error / training_set.examples.size();
             double precision = (double) true_positive_count / (true_positive_count + false_positive_count);
             double testset_precision = testNeuralNetwork(testing_set);
 
+            // Print metrics
+            DecimalFormat df2 = new DecimalFormat("##.####");
+            System.out.println(", Precision: " + (df2.format(precision))
+                    + ", Error: " + (df2.format(mean_squared_error))
+                    + ", Test Precision: " + (df2.format(testset_precision)));
+
+
+            // Check learning of test set and stop in case
+            if (testset_precision > max_testset_precision) {
+                max_testset_precision = testset_precision;
+                epochs_since_last_update = 0;
+            } else {
+                if (epochs_since_last_update++ > 50) {
+                    System.out.println(", Max Testing Precision: " + (df2.format(max_testset_precision)));
+                    break;
+                }
+            }
+
             // Add values to line charts
             if (graphPane != null) {
-                if (epoch % 10 == 0 || precision > 0.99999) {
+                if (epoch % 1 == 0 || precision > 0.99999) {
                     graphPane.addValueMSE(epoch, mean_squared_error);
                     graphPane.addValuePrecision(epoch, precision);
                     graphPane.addValueTesting(epoch, testset_precision);
                 }
             }
-
-            // Print metrics
-            DecimalFormat df2 = new DecimalFormat("##.####");
-            System.out.println(", Precision: " + (df2.format(precision))
-                             + ", Error: " + (df2.format(mean_squared_error))
-                             + ", Test Precision: " + (df2.format(testset_precision)));
         }
 
     }
@@ -133,7 +148,7 @@ public class NeuralNetwork {
         double false_positive_count = 0;
 
         // Iterate over testing dataset
-        for (DataExample dataExample : testingSet.dataset) {
+        for (DataExample dataExample : testingSet.examples) {
 
             // Evaluate
             ArrayList<Double> outputs = evaluate(dataExample.inputs);

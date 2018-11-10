@@ -77,7 +77,7 @@ public class DatasetParserForests {
                 dataExample.desiredOutputs.set(typeindex, (double) 1);
 
                 // Add dataExample to dataset
-                datasetForests.dataset.add(dataExample);
+                datasetForests.examples.add(dataExample);
 
             }
 

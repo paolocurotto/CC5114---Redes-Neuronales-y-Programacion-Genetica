@@ -12,7 +12,7 @@ import utils_graphs.GraphPane;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Main extends Application {
+public class Main_Tarea extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -23,7 +23,7 @@ public class Main extends Application {
 
         NeuralNetwork neuralNetwork = new NeuralNetwork(new int[] {
                 9,  // Number of inputs
-                15,  // Hidden layer
+                7,  // Hidden layer
                 4,  // Output layer
         });
 
@@ -39,6 +39,6 @@ public class Main extends Application {
         trainingSet.shuffle();
         testingSet.shuffle();
 
-        neuralNetwork.trainNetworkWithEpochs(trainingSet, testingSet, 8000, graph);
+        neuralNetwork.trainNetworkWithEpochs(trainingSet, testingSet, 1000000, graph);
     }
 }

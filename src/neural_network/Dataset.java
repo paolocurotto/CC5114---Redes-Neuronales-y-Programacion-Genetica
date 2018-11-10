@@ -2,6 +2,7 @@ package neural_network;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Object representing dataset of a neural network
@@ -9,14 +10,14 @@ import java.util.Collections;
  */
 public class Dataset {
 
-    public ArrayList<DataExample> dataset = new ArrayList<>();
+    public List<DataExample> examples = new ArrayList<>();
 
     public Dataset() {
 
     }
 
     public void shuffle() {
-        Collections.shuffle(dataset);
+        Collections.shuffle(examples);
     }
 
 
@@ -35,12 +36,12 @@ public class Dataset {
         double nL = 0;
         double nH = 1;
 
-        for (DataExample dataExample : dataset) {
+        for (DataExample dataExample : examples) {
             dL = Math.min(dL, Collections.min(dataExample.inputs));
             dH = Math.max(dH, Collections.max(dataExample.inputs));
         }
 
-        for (DataExample dataExample : dataset) {
+        for (DataExample dataExample : examples) {
             for (int i = 0; i < dataExample.inputs.size(); i++) {
                 double fx = (dataExample.inputs.get(i) - dL) * (nH - nL) / (dH - dL) + nL;
                 dataExample.inputs.set(i, fx);
@@ -117,7 +118,7 @@ public class Dataset {
      */
     public boolean checkDataset(NeuralNetwork neuralNetwork) {
 
-        for (DataExample record : dataset) {
+        for (DataExample record : examples) {
             // Checks outputs
             boolean check_1 = false;
             for (double output : record.desiredOutputs) {

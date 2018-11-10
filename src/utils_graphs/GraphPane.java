@@ -54,8 +54,8 @@ public class GraphPane {
         lineChartPrecision.setPrefSize(w, h);
         lineChartTesting.setPrefSize(w, h);
         lineChartMSE.setTitle("Mean squared error");
-        lineChartPrecision.setTitle("Precision");
-        lineChartTesting.setTitle("Precision Test datset");
+        lineChartPrecision.setTitle("Training Set Precision");
+        lineChartTesting.setTitle("Testing Set Precision");
         lineChartMSE.getData().addAll(seriesMSE, redLine2);
         lineChartPrecision.getData().addAll(redLine, seriesPrecision);
         lineChartTesting.getData().addAll(redLine3, seriesTesting);

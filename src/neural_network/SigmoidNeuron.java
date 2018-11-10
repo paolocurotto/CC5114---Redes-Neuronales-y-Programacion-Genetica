@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SigmoidNeuron {
 
-    private double learningRate = 0.05;
+    private double learningRate = 0.1;
     private ArrayList<Double> weights = new ArrayList<>();
     private double threshold;
     private double delta;
@@ -13,13 +13,14 @@ public class SigmoidNeuron {
 
 
     SigmoidNeuron(int n_of_weights) {
+        double range = 0.5;
         // Set random weights
         for (int n = 0; n < n_of_weights; n++) {
-            weights.add(ThreadLocalRandom.current().nextDouble(-0.2, 0.2));
+            weights.add(ThreadLocalRandom.current().nextDouble(-range, range));
         }
 
         // Set random threshold
-        threshold =  ThreadLocalRandom.current().nextDouble(-0.2, 0.2);
+        threshold =  ThreadLocalRandom.current().nextDouble(-range, range);
     }
 
     void feed(ArrayList<Double> inputs) {
