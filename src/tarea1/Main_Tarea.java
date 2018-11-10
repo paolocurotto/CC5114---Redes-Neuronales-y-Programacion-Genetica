@@ -29,6 +29,7 @@ public class Main_Tarea extends Application {
 
         Dataset trainingSet = DatasetParserForests.parseDataset("training.csv");
         Dataset testingSet = DatasetParserForests.parseDataset("testing.csv");
+        Dataset trainingSet_sorted = DatasetParserForests.parseDataset("training_sorted.csv");
 
         GraphPane graph = new GraphPane();
         Scene scene = new Scene(graph.getLineChart(), Color.WHITESMOKE);
@@ -40,5 +41,7 @@ public class Main_Tarea extends Application {
         testingSet.shuffle();
 
         neuralNetwork.trainNetworkWithEpochs(trainingSet, testingSet, 1000000, graph);
+
+        //neuralNetwork.trainNetworkWithEpochs(trainingSet_sorted, testingSet, 1000000, graph);
     }
 }
