@@ -114,7 +114,7 @@ public class WordSequence {
         }
 
         private Individual(int nletters) {
-            IntStream.range(0, nletters).forEach(i -> genes = genes + Letter.randomLetter() );
+            IntStream.range(0, nletters).forEach(i -> genes = genes + Letter.randomLetter());
         }
 
         void calculateFitness(String word_target) {
@@ -151,10 +151,9 @@ public class WordSequence {
 
     private enum Letter {
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
-
         private static final Letter[] VALUES = values();
         private static final int SIZE = VALUES.length;
-        private static final Random RANDOM = new Random();
+        private static final Random RANDOM = new Random(24);
         public static Letter randomLetter()  {
             return VALUES[RANDOM.nextInt(SIZE)];
         }
