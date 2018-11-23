@@ -13,7 +13,7 @@ public class NQueens {
 
     private static void start() {
 
-        int pop_size = 30; // Population size
+        int pop_size = 50; // Population size
         int N = 4; // Queens
         int generationCounter = 0; // To count generations
         List<Individual> population = new ArrayList<>(); // Population's individuals list
@@ -25,7 +25,7 @@ public class NQueens {
         board = new Board(N);
 
         // Initialize population
-        IntStream.range(0, pop_size).forEach(i -> population.add(new Individual(N)));
+        IntStream.range(0, pop_size).forEach(i -> population.add(new Individual(i, N)));
 
         // Evaluate fitness
         population.forEach(individual -> individual.calculateFitness(N));
@@ -114,17 +114,16 @@ public class NQueens {
     static class Individual {
         List<Tile> genes = new ArrayList<>();
         int fitness = 0;
+        int identifier;
 
-        private Individual() {
-        }
-
-        private Individual(int nQueens) {
+        private Individual(int iden, int nQueens) {
+            identifier = iden;
             List<Integer> positions = new ArrayList<>();
             IntStream.range(0, nQueens * nQueens).forEach(positions::add);
             Collections.shuffle(positions);
             for (int i = 0; i < nQueens; i++) {
-                int r = positions.get(i) / nQueens;
-                int c = positions.get(i) % nQueens;
+                int r = 1 + positions.get(i) / nQueens;
+                int c = 1 + positions.get(i) % nQueens;
                 genes.add(board.rows.get(r).tiles.get(c));
             }
         }
@@ -137,14 +136,19 @@ public class NQueens {
 
             // Check collisions
             for (Tile t : genes) {
-                collisions += t.queenOn_T() + t.queenOn_TR() + t.queenOn_R() + t.queenOn_BR() +
-                              t.queenOn_B() + t.queenOn_BL() + t.queenOn_L() + t.queenOn_TL();
+                collisions += t.T.queenOn_T();
+                collisions += t.TR.queenOn_TR();
+                collisions += t.R.queenOn_R();
+                collisions += t.BR.queenOn_BR();
+                collisions += t.B.queenOn_B();
+                collisions += t.BL.queenOn_BL();
+                collisions += t.L.queenOn_L();
+                collisions += t.TL.queenOn_TL();
             }
 
+            System.out.println("ind = " + identifier + ", collisions = " + collisions);
 
             genes.forEach(t -> t.queenHere = 0);
-
-
         }
 
         /*
@@ -181,22 +185,21 @@ public class NQueens {
 
         Board(int N) {
             // Initialize rows and tiles
-            for (int i = 0; i < N + 1; i++) {
-                Row r = new Row(N);
+            for (int i = 0; i < N + 2; i++) {
+                Row r = new Row(i, N);
+                rows.add(r);
             }
-
             // Connect tiles
-            for (int y = 0; y < N; y++) {
-                for (int x = 0; x < N; x++) {
-
-                    rows.get(y).tiles.get(x).T  = (y == 0)                   ? null : rows.get(y - 1).tiles.get(x);
-                    rows.get(y).tiles.get(x).TR = (y == 0 || x == N - 1)     ? null : rows.get(y - 1).tiles.get(x + 1);
-                    rows.get(y).tiles.get(x).R  = (x == N - 1)               ? null : rows.get(y).tiles.get(x + 1);
-                    rows.get(y).tiles.get(x).BR = (y == N - 1 || x == N - 1) ? null : rows.get(y + 1).tiles.get(x + 1);
-                    rows.get(y).tiles.get(x).B  = (y == N - 1)               ? null : rows.get(y + 1).tiles.get(x);
-                    rows.get(y).tiles.get(x).BL = (y == N - 1 || x == 0)     ? null : rows.get(y + 1).tiles.get(x - 1);
-                    rows.get(y).tiles.get(x).L  = (x == 0)                   ? null : rows.get(y).tiles.get(x - 1);
-                    rows.get(y).tiles.get(x).TL = (y == 0 || x == 0)         ? null : rows.get(y - 1).tiles.get(x - 1);
+            for (int y = 1; y < N + 1; y++) {
+                for (int x = 1; x < N + 1; x++) {
+                    rows.get(y).tiles.get(x).T  = rows.get(y - 1).tiles.get(x);
+                    rows.get(y).tiles.get(x).TR = rows.get(y - 1).tiles.get(x + 1);
+                    rows.get(y).tiles.get(x).R  = rows.get(y).tiles.get(x + 1);
+                    rows.get(y).tiles.get(x).BR = rows.get(y + 1).tiles.get(x + 1);
+                    rows.get(y).tiles.get(x).B  = rows.get(y + 1).tiles.get(x);
+                    rows.get(y).tiles.get(x).BL = rows.get(y + 1).tiles.get(x - 1);
+                    rows.get(y).tiles.get(x).L  = rows.get(y).tiles.get(x - 1);
+                    rows.get(y).tiles.get(x).TL = rows.get(y - 1).tiles.get(x - 1);
                 }
             }
         }
@@ -212,17 +215,30 @@ public class NQueens {
         Tile BL; Tile B; Tile BR;
 
         int queenHere = 0;
-
-        int queenOn_T() { return (T == null) ? queenHere : queenHere + T.queenOn_T(); }
-        int queenOn_TR() { return (TR == null) ? queenHere : queenHere + TR.queenOn_TR(); }
-        int queenOn_R() { return (R == null) ? queenHere : queenHere + R.queenOn_R(); }
-        int queenOn_BR() { return (BR == null) ? queenHere : queenHere + BR.queenOn_BR(); }
-        int queenOn_B() { return (B == null) ? queenHere : queenHere + B.queenOn_B(); }
-        int queenOn_BL() { return (BL == null) ? queenHere : queenHere + BL.queenOn_BL(); }
-        int queenOn_L() { return (L == null) ? queenHere : queenHere + L.queenOn_L(); }
-        int queenOn_TL() { return (TL == null) ? queenHere : queenHere + TL.queenOn_TL(); }
-
+        int queenOn_T()  { return queenHere +  T.queenOn_T() ; }
+        int queenOn_TR() { return queenHere + TR.queenOn_TR(); }
+        int queenOn_R()  { return queenHere +  R.queenOn_R() ; }
+        int queenOn_BR() { return queenHere + BR.queenOn_B() ; }
+        int queenOn_B()  { return queenHere +  B.queenOn_B() ; }
+        int queenOn_BL() { return queenHere + BL.queenOn_BL(); }
+        int queenOn_L()  { return queenHere +  L.queenOn_L() ; }
+        int queenOn_TL() { return queenHere + TL.queenOn_TL(); }
     }
+
+    /**
+     * Null Tile
+     * */
+    static class NullTile extends Tile {
+        int queenOn_T()  { return 0; }
+        int queenOn_TR() { return 0; }
+        int queenOn_R()  { return 0; }
+        int queenOn_BR() { return 0; }
+        int queenOn_B()  { return 0; }
+        int queenOn_BL() { return 0; }
+        int queenOn_L()  { return 0; }
+        int queenOn_TL() { return 0; }
+    }
+
 
     /**
      * Row
@@ -230,15 +246,16 @@ public class NQueens {
     static class Row {
         List<Tile> tiles = new ArrayList<>();
 
-        Row(int N) {
+        Row(int r, int N) {
             for (int i = 0; i < N + 2; i++) {
-                tiles.add(new Tile());
+                if (r == 0) { tiles.add(new NullTile()); } // First row is nulls
+                else if (r == N + 1) { tiles.add(new NullTile()); } // Last row is nulls
+                else if (i == 0) { tiles.add(new NullTile());} // First column is nulls
+                else if (i == N + 1) {tiles.add(new NullTile());} // Last column is nulls
+                else { tiles.add(new Tile()); } // Normal board
             }
-
         }
     }
-
-
 
 }
 
