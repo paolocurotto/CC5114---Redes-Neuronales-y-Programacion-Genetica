@@ -44,24 +44,14 @@ public class TravellingSalesman {
 
 
     private static void initialize_graph(int number_of_nodes) {
-        for (int i = 1; i <= number_of_nodes; i++) {
-            NodeType nodeType;
-            switch (i) {
-
-                case 0:
-                    graph.add(new Node(i, nodeType));
-                    break;
-                case (number_of_nodes):
-                    graph.add(new Node(i, nodeType));
-                    break;
-                default:
-                    graph.add(new Node(i, NodeType.NORMAL));
-
-
-
-            }
+        // Initialize nodes
+        for (int i = 0; i < number_of_nodes; i++) {
+            if (i == 0) {graph.add(new Node(i, NodeType.START));}
+            else if (i == (number_of_nodes - 1)) {graph.add(new Node(i, NodeType.END));}
+            else {graph.add(new Node(i, NodeType.NORMAL));}
 
         }
+        // Initialize connections
         for (int i = 0; i < number_of_nodes - 1; i++) {
             for (int rest = i + 1; rest < number_of_nodes; rest++) {
                 if (Math.random() < 0.5) { // Connect node(i) <-> node(rest)
