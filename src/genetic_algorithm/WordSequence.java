@@ -1,6 +1,8 @@
 package genetic_algorithm;
 
 import javax.sound.sampled.Line;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
@@ -8,18 +10,46 @@ import java.util.stream.IntStream;
 public class WordSequence {
 
     public static void main(String[] args) {
-        start();
+
+        int n;
+        ArrayList<Double> times = new ArrayList<>();
+        ArrayList<Double> gens = new ArrayList<>();
+        for (n = 0; n < 50; n++) {
+            Instant start = Instant.now();
+            int n_gen = start();
+            Instant finish = Instant.now();
+            times.add((double) Duration.between(start, finish).toMillis());
+            gens.add((double) n_gen);
+        }
+        //1
+        double average_t = times.stream().mapToDouble(val -> val).average().orElse(0.0);
+        double average_gens = gens.stream().mapToDouble(val -> val).average().orElse(0.0);
+        //2
+        times.replaceAll(i -> average_t - i);
+        gens.replaceAll(i -> average_gens - i);
+        //3
+        times.replaceAll(i -> i*i);
+        gens.replaceAll(i -> i*i);
+        //4
+        double sum_t = 0; for (double d : times) {sum_t+=d;}
+        double sum_gens = 0; for (double d : gens) {sum_gens+=d;}
+        //5 & 6
+        double s_times =  Math.sqrt(sum_t/(times.size()-1));
+        double s_gens =  Math.sqrt(sum_gens/(gens.size()-1));
+
+        System.out.println("Avg_T/S = " + average_t + " ms, " + s_times);
+        System.out.println("Avg_GENS/S = " + average_gens + " generations, " + s_gens);
     }
 
-    private static void start() {
+    private static int start() {
 
-        int N = 50; // Population size
-        String secretWord = "GENETICALGORITHM"; // Secret word
+        int N = 100; // Population size
+        String secretWord = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"; // Secret word
         int n_letters = secretWord.length(); // Secret word's number of letters
         int generationCounter = 0; // To count generations
         List<Individual> population = new ArrayList<>(); // Population's individuals list
         List<Individual> new_generation = new ArrayList<>(); // Population's offspring generation
-        int k = 30; // For tournament selection
+        int k = N; // For tournament selection
 
         // Initialize population
         IntStream.range(0, N).forEach(i -> population.add(new Individual(n_letters)));
@@ -32,7 +62,7 @@ public class WordSequence {
         boolean solutionFound = (population.get(0).fitness == n_letters);
 
         // Print info
-        print_info(generationCounter, population);
+        //print_info(generationCounter, population);
 
 
         /** Genetic algorithm **/
@@ -52,8 +82,8 @@ public class WordSequence {
                 Individual mother = bestIndividuals.get(mother_index);
                 Individual baby = father.breed(mother);
                 new_generation.add(baby);
-            }
-            */
+            }*/
+
 
 
             // Tournament selection and reproduction
@@ -90,8 +120,11 @@ public class WordSequence {
             solutionFound = (population.get(0).fitness == n_letters);
 
             // Print info
-            print_info(++generationCounter, population);
+            //print_info(++generationCounter, population);
+            ++generationCounter;
         }
+        print_info(generationCounter, population);
+        return generationCounter;
     }
 
     static void print_info(int c, List<Individual> pop) {

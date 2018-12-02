@@ -116,6 +116,16 @@ public class NetworkPane {
         return pane;
     }
 
+    private Pane queenPane() {
+        Pane pane = new Pane();
+        Circle neuron = new Circle();
+        neuron.setRadius(10);
+        neuron.setFill(Color.CORNFLOWERBLUE);
+        pane.getChildren().add(neuron);
+        pane.setPrefSize(20, 20);
+        return pane;
+    }
+
     public Pane getPane() {
         return root;
     }

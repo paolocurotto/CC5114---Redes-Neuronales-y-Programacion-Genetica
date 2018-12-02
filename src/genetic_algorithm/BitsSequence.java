@@ -1,5 +1,7 @@
 package genetic_algorithm;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,14 +10,51 @@ import java.util.concurrent.ThreadLocalRandom;
 public class BitsSequence {
 
     public static void main(String[] args) {
-        start();
+
+        int n;
+        ArrayList<Double> times = new ArrayList<>();
+        ArrayList<Double> gens = new ArrayList<>();
+        for (n = 0; n < 50; n++) {
+            Instant start = Instant.now();
+            int n_gen = start();
+            Instant finish = Instant.now();
+            times.add((double) Duration.between(start, finish).toMillis());
+            gens.add((double) n_gen);
+        }
+        //1
+        double average_t = times.stream().mapToDouble(val -> val).average().orElse(0.0);
+        double average_gens = gens.stream().mapToDouble(val -> val).average().orElse(0.0);
+        //2
+        times.replaceAll(i -> average_t - i);
+        gens.replaceAll(i -> average_gens - i);
+        //3
+        times.replaceAll(i -> i*i);
+        gens.replaceAll(i -> i*i);
+        //4
+        double sum_t = 0; for (double d : times) {sum_t+=d;}
+        double sum_gens = 0; for (double d : gens) {sum_gens+=d;}
+        //5 & 6
+        double s_times =  Math.sqrt(sum_t/(times.size()-1));
+        double s_gens =  Math.sqrt(sum_gens/(gens.size()-1));
+
+        System.out.println("Avg_T/S = " + average_t + " ms, " + s_times);
+        System.out.println("Avg_GENS/S = " + average_gens + " generations, " + s_gens);
+
     }
 
-    public static void start() {
+    public static int start() {
 
         // Population size
-        int N = 10;
-        int[] secretSeq = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // Secret bits sequence
+        int N = 50;
+        // Secret bits sequence
+        int[] secretSeq = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        };
         int n_bits = secretSeq.length;
         int generationCounter = 0; // Count generations
 
@@ -40,7 +79,7 @@ public class BitsSequence {
             solutionFound = true;
         }
 
-        print_info(generationCounter, population);
+        //print_info(generationCounter, population);
 
 
         /** Genetic algorithm **/
@@ -72,15 +111,17 @@ public class BitsSequence {
             Collections.sort(population);
 
             // Solution found?
-            if (population.get(0).fitness == n_bits) {
+            if (population.get(0).fitness == n_bits || generationCounter > 50000) {
                 solutionFound = true;
             }
-
-            print_info(++generationCounter, population);
+            ++generationCounter;
+            //print_info(++generationCounter, population);
 
         }
-
+        print_info(generationCounter, population);
         System.out.println("Finished.");
+        if (generationCounter > 20000) {System.out.println("GENERATIONS > 20000.");}
+        return generationCounter;
 
     }
 
