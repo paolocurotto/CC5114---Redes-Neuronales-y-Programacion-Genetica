@@ -21,7 +21,7 @@ public class Ball implements Options {
         y = WINDOW_HEIGHT / 2;
         real_x = x;
         real_y = y;
-        angle = 0;
+        angle = 170;
         speed = BALL_SPEED;
     }
 

@@ -10,7 +10,8 @@ public class TAdapter extends KeyAdapter {
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN ) {
+        if ((key == KeyEvent.VK_UP && paddle.y_direction == -1 ) ||
+                key == KeyEvent.VK_DOWN && paddle.y_direction == 1) {
             paddle.y_direction = 0;
         }
     }

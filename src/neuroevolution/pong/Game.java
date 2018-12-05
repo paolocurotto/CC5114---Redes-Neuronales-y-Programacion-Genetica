@@ -21,8 +21,8 @@ public class Game extends JPanel implements Options {
     private Ball ball;
 
     public Game() {
-        paddle_A = new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)));
-        paddle_B = new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)));
+        paddle_A = new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
+        paddle_B = new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
         ball = new Ball();
         TAdapter ta = new TAdapter();
         ta.setPaddle(paddle_A);
@@ -71,6 +71,45 @@ public class Game extends JPanel implements Options {
     }
 
     private void checkCollisions() {
+         /**
+         /*  Ball collision
+         **/
+
+        //Hit top edge
+        if (ball.real_y - ball.r < 0) {
+            ball.real_y = ball.r;
+            ball.angle = 360 - ball.angle;
+        }
+        // Hit bottom edge
+        if (ball.real_y + ball.r > WINDOW_HEIGHT) {
+            ball.real_y = WINDOW_HEIGHT - ball.r;
+            ball.angle = 360 - ball.angle;
+        }
+        // Hit left edge
+        if (ball.real_x - ball.r < 0) {
+            ball.real_x = ball.r;
+            ball.angle = 180 - ball.angle;
+        }
+        // Hit right edge
+        if (ball.real_x + ball.r > WINDOW_WIDTH) {
+            ball.real_x = WINDOW_WIDTH - ball.r;
+            ball.angle = (180 - ball.angle) % 360;
+        }
+
+        // Collision ball-paddle
+        //if (ball.real_x - ball.r < paddle_A.real_x + paddle_A.PADDLE_WIDTH &&
+        //        Math.abs(paddle_A.real_y + PADDLE_HEIGHT/2 - ball.y) < PADDLE_HEIGHT / 2) {
+        //    ball.angle = 180 - ball.angle;
+        //}
+
+
+
+
+
+
+
+
+
     }
 
 }

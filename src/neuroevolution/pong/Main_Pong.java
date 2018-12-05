@@ -16,9 +16,9 @@ public class Main_Pong extends JFrame implements Options {
         add(new Game());
         setTitle("Pong ai");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        setSize(WINDOW_WIDTH + 15, WINDOW_HEIGHT + 39);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         setVisible(true);
     }
 
