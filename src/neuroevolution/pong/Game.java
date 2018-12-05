@@ -16,14 +16,13 @@ public class Game extends JPanel implements Options {
     private Timer timer;
     private int DELAY = 10;
     private int PERIOD = 10;
-
     private Paddle paddle_A;
     private Paddle paddle_B;
     private Ball ball;
 
     public Game() {
-        paddle_A = new Paddle();
-        paddle_B = new Paddle();
+        paddle_A = new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)));
+        paddle_B = new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)));
         ball = new Ball();
         TAdapter ta = new TAdapter();
         ta.setPaddle(paddle_A);

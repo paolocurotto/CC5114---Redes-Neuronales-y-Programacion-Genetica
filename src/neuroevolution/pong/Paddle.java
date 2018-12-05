@@ -13,10 +13,10 @@ public class Paddle implements Options{
     public double speed;
     public int y_direction;
 
-    public Paddle() {
+    public Paddle(int init_x) {
         height = PADDLE_HEIGHT;
         width = PADDLE_WIDTH;
-        x = 200;
+        x = init_x;
         real_x = x;
         y = WINDOW_HEIGHT / 2;
         real_y = y;
