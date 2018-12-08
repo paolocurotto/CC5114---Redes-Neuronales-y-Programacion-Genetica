@@ -6,13 +6,10 @@ import java.awt.*;
 public class Main_Pong extends JFrame implements Options {
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            Main_Pong game = new Main_Pong();
-            game.setVisible(true);
-        });
+        EventQueue.invokeLater(Main_Pong::run);
     }
 
-    public Main_Pong() {
+    private Main_Pong() {
         add(new Game());
         setTitle("Pong ai");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -22,4 +19,8 @@ public class Main_Pong extends JFrame implements Options {
         setVisible(true);
     }
 
+    private static void run() {
+        Main_Pong game = new Main_Pong();
+        game.setVisible(true);
+    }
 }
