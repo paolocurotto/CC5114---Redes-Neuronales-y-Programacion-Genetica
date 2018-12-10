@@ -1,8 +1,6 @@
 package neuroevolution.pong;
 
 import java.awt.*;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,19 +14,18 @@ public class Game extends JPanel implements Options {
     private Paddle paddle_A;
     private Paddle paddle_B;
     private Ball ball;
+    int score_A = 0;
+    int score_B = 0;
 
     Game() {
         paddle_A = new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
         paddle_B = new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
         ball = new Ball();
-        ball.collisionsBall.setCollisions(paddle_A, paddle_B);
-        TAdapter ta = new TAdapter();
-        ta.setPaddle(paddle_A);
+        TAdapter ta = new TAdapter(paddle_A);
         addKeyListener(ta);
         setFocusable(true);
         setDoubleBuffered(true);
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new ScheduleTask(), DELAY, PERIOD);
+        new Timer().scheduleAtFixedRate(new TimerTask() {public void run() { tick(); }}, DELAY, PERIOD);
     }
 
     @Override
@@ -42,13 +39,12 @@ public class Game extends JPanel implements Options {
         Toolkit.getDefaultToolkit().sync();
     }
 
-    private class ScheduleTask extends TimerTask {
-        @Override
-        public void run() {
-            moveObjects();
-            checkCollisions();
-            repaint();
-        }
+    /* Actions every tick */
+    private void tick() {
+        moveObjects();
+        checkCollisions();
+        checkScore();
+        repaint();
     }
 
     private void moveObjects() {
@@ -58,32 +54,18 @@ public class Game extends JPanel implements Options {
     }
 
     private void checkCollisions() {
-         ball.checkCollisions();
+         ball.checkCollisions(paddle_A, paddle_B);
     }
 
     private void drawBackground(Graphics2D g2d) {
-        Color c1 = g2d.getColor();
-        g2d.setColor(new Color(20, 130, 44));
-        g2d.fillRect(0,0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        g2d.setColor(c1);
-
-        g2d.setColor(Color.red);
-        //g2d.setFont(monoFont);
-        FontMetrics fm = g2d.getFontMetrics();
-        double w = fm.stringWidth("Java Source");
-        double h = fm.getAscent();
-        //g2d.drawString("Java Source", 120 - (w / 2), 120 + (h / 4));
-        Observer a = new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-
-            }
-        };
-
-        Observable b = new Observable();
-
-
-
+        setBackground(new Color(20, 130, 44));
+        g2d.setColor(Color.white);
+        Composite c = g2d.getComposite();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .3f));
+        g2d.setFont(new Font("Georgia", Font.BOLD, 80));
+        g2d.drawString(score_A + "", WINDOW_WIDTH/2 - 130, 100);
+        g2d.drawString(score_B + "", WINDOW_WIDTH/2 + 80, 100);
+        g2d.setComposite(c);
     }
 
     private void drawObjects(Graphics2D g2d) {
@@ -91,4 +73,18 @@ public class Game extends JPanel implements Options {
         paddle_A.draw(g2d);
         paddle_B.draw(g2d);
     }
+
+    private void checkScore() {
+        // Point for B
+        if (ball.real_x < 0) {
+            score_A++;
+            ball.resetBall();
+        }
+        // Point for A
+        if (ball.real_x > WINDOW_WIDTH) {
+            score_B++;
+            ball.resetBall();
+        }
+    }
+
 }

@@ -7,6 +7,10 @@ public class TAdapter extends KeyAdapter {
 
     private Paddle paddle;
 
+    TAdapter(Paddle p) {
+        this.paddle = p;
+    }
+
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
@@ -26,7 +30,4 @@ public class TAdapter extends KeyAdapter {
         }
     }
 
-    void setPaddle(Paddle p) {
-        paddle = p;
-    }
 }

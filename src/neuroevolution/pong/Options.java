@@ -3,7 +3,7 @@ package neuroevolution.pong;
 public interface Options {
 
     // Window
-    int WINDOW_WIDTH = 600;
+    int WINDOW_WIDTH = 700;
     int WINDOW_HEIGHT = 500;
 
     // Paddles
