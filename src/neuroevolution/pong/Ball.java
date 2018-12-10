@@ -10,7 +10,7 @@ public class Ball implements Options {
     private int y;
     double real_x;
     double real_y;
-    double angle_p = 0;
+    double angle_p = 2;
     double vx = BALL_SPEED * Math.cos(angle_p);
     double vy = BALL_SPEED * Math.sin(angle_p);
     Collisions_Ball collisionsBall = new Collisions_Ball(this);

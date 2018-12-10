@@ -1,9 +1,11 @@
 package neuroevolution.pong;
 
+import neuroevolution.Individual;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Paddle implements Options{
+public class Paddle implements Options {
     private int x;
     private int y;
     private double real_y;
@@ -15,6 +17,10 @@ public class Paddle implements Options{
         y = (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2);
         real_y = y;
         collisionsPaddle = new Collisions_Paddle(this);
+    }
+
+    public Paddle() {
+        this((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
     }
 
     void draw(Graphics2D g2d) {
