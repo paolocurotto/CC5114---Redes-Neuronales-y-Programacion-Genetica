@@ -12,6 +12,10 @@ public interface Options {
     double PADDLE_SPEED = 4;
     int PADDLE_DISTANCE_FROM_EDGE = 10; // % of window width
 
+    int PADDLE_UP = -1;
+    int PADDLE_IDLE = 0;
+    int PADDLE_DOWN = 1;
+
     // Ball
     double BALL_SPEED = 5;
     int BALL_RADIUS = 10;

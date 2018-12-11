@@ -8,9 +8,9 @@ import java.util.stream.IntStream;
 public class GeneticAlgorithm {
 
     public int pop_size = 20; // Population size
-    int k; // For tournament selection
-    List<Individual> population = new ArrayList<>();
-    List<Individual> new_generation = new ArrayList<>(); // Population's offspring generation
+    public int k; // For tournament selection
+    public List<Individual> population = new ArrayList<>();
+    public List<Individual> new_generation = new ArrayList<>(); // Population's offspring generation
 
     int generationCounter = 0;
     int fitnessTarget = 10;

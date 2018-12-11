@@ -1,12 +1,11 @@
 package neuroevolution.pong;
 
 import neuroevolution.GeneticAlgorithm;
+import neuroevolution.Individual;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
@@ -15,7 +14,7 @@ public class Game extends JPanel implements Options {
     GeneticAlgorithm ga = new GeneticAlgorithm();
 
     private static final long serialVersionUID = 1L;
-    private int DELAY = 50;
+    private int DELAY = 1000;
     private int PERIOD = 5;
     private Paddle paddle_A;
     private Paddle paddle_B;
@@ -31,11 +30,11 @@ public class Game extends JPanel implements Options {
             Paddles ps =
                     new Paddles(new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2),
                     new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2));
-
+            Color randomColor = new Color((int)(Math.random() * 0x1000000));
+            ps.A.color = randomColor;
+            ps.B.color = randomColor;
+            paddles.add(ps);
         }
-
-        paddle_A = new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
-        paddle_B = new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2);
         ball = new Ball();
         TAdapter ta = new TAdapter(paddle_A, paddle_B);
         addKeyListener(ta);
@@ -62,22 +61,33 @@ public class Game extends JPanel implements Options {
         checkScore();
         repaint();
 
-        if (paddle_A.getCenterY() < ball.real_y) {
-            paddle_A.y_direction = 1;
-        } else {
-            paddle_A.y_direction = -1;
+        for (int i = 0; i < paddles.size(); i++) {
+            // [paddle y, ball x, ball y, ball v_x, ball v_y]
+            int mov = ga.population.get(i).movePaddle(new double[]{
+                    Double.valueOf(paddles.get(i).A.getCenterY()),
+                    ball.real_x,
+                    ball.real_y,
+                    ball.vx,
+                    ball.vy,
+            });
+            paddles.get(i).A.y_direction = mov;
+            paddles.get(i).B.y_direction = mov;
         }
 
     }
 
     private void moveObjects() {
         ball.move();
-        paddle_A.move();
-        paddle_B.move();
+        for (Paddles paddles : paddles) {
+            paddles.A.move();
+            paddles.B.move();
+        }
     }
 
     private void checkCollisions() {
-         ball.checkCollisions(paddle_A, paddle_B);
+        for (Paddles paddles : paddles) {
+            ball.checkCollisions(paddles.A, paddles.B);
+        }
     }
 
     private void drawBackground(Graphics2D g2d) {
@@ -93,19 +103,21 @@ public class Game extends JPanel implements Options {
 
     private void drawObjects(Graphics2D g2d) {
         ball.draw(g2d);
-        paddle_A.draw(g2d);
-        paddle_B.draw(g2d);
+        for (Paddles paddles : paddles) {
+            paddles.A.draw(g2d);
+            paddles.B.draw(g2d);
+        }
     }
 
     private void checkScore() {
         // Point for B
         if (ball.real_x < 0) {
-            score_A++;
+            score_B++;
             ball.resetBall();
         }
         // Point for A
         if (ball.real_x > WINDOW_WIDTH) {
-            score_B++;
+            score_A++;
             ball.resetBall();
         }
     }

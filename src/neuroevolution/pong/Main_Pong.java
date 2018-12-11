@@ -10,11 +10,7 @@ public class Main_Pong extends JFrame implements Options {
     public static void main(String[] args) {
         EventQueue.invokeLater(Main_Pong::run);
 
-
         GeneticAlgorithm ga = new GeneticAlgorithm();
-
-
-
 
     }
 

@@ -1,9 +1,13 @@
 package neuroevolution;
 
 import neural_network.NeuralNetwork;
+import neuroevolution.pong.Ball;
+import neuroevolution.pong.Paddle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Individual {
     NeuralNetwork brain;
@@ -15,9 +19,11 @@ public class Individual {
         brain = new NeuralNetwork(new int[]{5, 3, 4, 3});
     }
 
-    void thinkOutput() {
-
-    }
+    /*
+    *  output 0 -> UP
+    *  output 1 -> IDLE
+    *  output 2 -> DOWN
+    * */
 
     // Evaluate fitness
     void calculateFitness(int target) {
@@ -53,5 +59,11 @@ public class Individual {
         }
 
         return child;
+    }
+
+    public int movePaddle(double[] info) {
+        List<Double> outputs =Arrays.stream(info).boxed().collect(Collectors.toList());
+        int dir = brain.evaluate_index(outputs);
+        return dir;
     }
 }

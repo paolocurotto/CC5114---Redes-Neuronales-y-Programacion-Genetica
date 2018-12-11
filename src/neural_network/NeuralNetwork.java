@@ -6,6 +6,7 @@ import javax.xml.crypto.Data;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static neural_network.DataExample.*;
 import static neural_network.Dataset.Prediction.FALSE_POSITIVE;
@@ -45,6 +46,20 @@ public class NeuralNetwork {
     public ArrayList<Double> evaluate(ArrayList<Double> inputs) {
         neuralLayers.get(0).feedLayer(inputs);
         return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
+    }
+
+    // Index of output
+    public int evaluate_index(List<Double> inputs) {
+        neuralLayers.get(0).feedLayer((ArrayList<Double>) inputs);
+        // Find index of highest value in prediction (= answer)
+        int index = 0;
+        List<Double> outs = neuralLayers.get(neuralLayers.size() - 1).getOutputs();
+        for (int i = 1; i < outs.size(); i++) {
+            if (outs.get(index) < outs.get(i)) {
+                index = i;
+            }
+        }
+        return index;
     }
 
     // Main_Tarea method

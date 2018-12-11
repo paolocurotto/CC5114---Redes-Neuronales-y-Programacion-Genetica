@@ -1,7 +1,5 @@
 package neuroevolution.pong;
 
-import neuroevolution.Individual;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -11,6 +9,8 @@ public class Paddle implements Options {
     private double real_y;
     int y_direction = 0;
     private Collisions_Paddle collisionsPaddle;
+    Color color;
+    int hits = 0;
 
     Paddle(int init_x) {
         x = init_x;
@@ -25,7 +25,7 @@ public class Paddle implements Options {
 
     void draw(Graphics2D g2d) {
         Color c1 = g2d.getColor();
-        g2d.setColor(Color.ORANGE);
+        g2d.setColor(color);
         g2d.fillRect(this.x, this.y, PADDLE_WIDTH, PADDLE_HEIGHT);
         g2d.setColor(c1);
     }

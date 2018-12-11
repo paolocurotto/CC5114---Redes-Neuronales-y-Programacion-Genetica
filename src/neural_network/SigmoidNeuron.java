@@ -13,7 +13,7 @@ public class SigmoidNeuron {
 
 
     SigmoidNeuron(int n_of_weights) {
-        double range = 0.5;
+        double range = 2;
         // Set random weights
         for (int n = 0; n < n_of_weights; n++) {
             weights.add(ThreadLocalRandom.current().nextDouble(-range, range));
