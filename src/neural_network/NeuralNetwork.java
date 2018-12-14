@@ -15,6 +15,7 @@ import static neural_network.Dataset.Prediction.TRUE_POSITIVE;
 public class NeuralNetwork {
 
     public ArrayList<NeuronLayer> neuralLayers = new ArrayList<>();
+    public int n_neurons = 0;
 
     // E.g: layers = [5, 7, 3] -> NN with 5 inputs, 7 neurons in hidden layer, 3 neurons in output
     public NeuralNetwork(int[] layers) {
@@ -22,6 +23,7 @@ public class NeuralNetwork {
 
             // E.g: NeuronLayer(3, 5) -> Layer with 3 neurons and 5 weights per neuron
             neuralLayers.add(new NeuronLayer(layers[n], layers[n - 1]));
+            n_neurons += layers[n];
             if (neuralLayers.size() >= 2) {
                 neuralLayers.get(n - 2).setNextLayer(neuralLayers.get(n - 1));
                 neuralLayers.get(n - 1).setPreviousLayer(neuralLayers.get(n - 2));

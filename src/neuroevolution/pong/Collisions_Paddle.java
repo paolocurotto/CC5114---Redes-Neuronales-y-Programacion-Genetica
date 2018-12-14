@@ -25,6 +25,9 @@ public class Collisions_Paddle implements Options {
 
             // Horizontal collision
             if (H_ratio > V_ratio) {
+
+                paddle.hits++;
+
                 // from right
                 if (paddle.getCenterX() < ball.real_x) {
                     ball.real_x = paddle.getCenterX() + PADDLE_WIDTH/2 + BALL_RADIUS + 1;

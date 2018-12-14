@@ -11,6 +11,8 @@ public class SigmoidNeuron {
     private double delta;
     private double output;
 
+    SigmoidNeuron() {
+    }
 
     SigmoidNeuron(int n_of_weights) {
         double range = 2;
@@ -41,4 +43,11 @@ public class SigmoidNeuron {
     void setDelta(double d) { this.delta = d; }
     public double getBias() { return threshold; }
     public void setBias(double b) { threshold = b; }
+
+    public SigmoidNeuron makeClone() {
+        SigmoidNeuron s = new SigmoidNeuron();
+        s.weights.addAll(this.weights);
+        s.threshold = this.threshold;
+        return  s;
+    }
 }

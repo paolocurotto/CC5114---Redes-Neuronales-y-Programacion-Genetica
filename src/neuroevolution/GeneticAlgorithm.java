@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 public class GeneticAlgorithm {
 
     public int pop_size = 20; // Population size
-    public int k; // For tournament selection
+    public int k = pop_size; // For tournament selection
     public List<Individual> population = new ArrayList<>();
     public List<Individual> new_generation = new ArrayList<>(); // Population's offspring generation
 
@@ -17,7 +17,6 @@ public class GeneticAlgorithm {
 
     public GeneticAlgorithm() {
         IntStream.range(0, pop_size).forEach(i -> population.add(new Individual()));
-
     }
 
     /** Genetic algorithm **/

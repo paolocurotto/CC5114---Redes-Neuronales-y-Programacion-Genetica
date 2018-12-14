@@ -1,12 +1,14 @@
 package neuroevolution;
 
 import neural_network.NeuralNetwork;
+import neural_network.SigmoidNeuron;
 import neuroevolution.pong.Ball;
 import neuroevolution.pong.Paddle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class Individual {
@@ -26,37 +28,40 @@ public class Individual {
     * */
 
     // Evaluate fitness
-    void calculateFitness(int target) {
-
+    public void calculateFitness(int hits) {
+        fitness = hits;
     }
 
     // Individual 1 + Individual 2 = baby
     Individual breed(Individual f) {
         Individual child = new Individual();
-        List<Integer> chromosome_x = new ArrayList<>(this.genes);
-        List<Integer> chromosome_y = new ArrayList<>(f.genes);
-        int nGenes = chromosome_y.size();
+        int nGenes = this.brain.n_neurons;
 
-        // Make child with N genes from parents' chromosomes at random
-        for (int c = 0; c < nGenes; c++) {
-            int gene;
-            // Pick fathers gene, 50% chance
-            if (Math.random() < 0.5) {
-                gene = chromosome_x.get(0);
+        int index_a = ThreadLocalRandom.current().nextInt(0, nGenes);
+        int index_b = ThreadLocalRandom.current().nextInt(index_a + 1, nGenes + 1);
+        int current = 0;
+        for (int x = 0; x < child.brain.neuralLayers.size(); x++) {
+
+            for (int y = 0; y < child.brain.neuralLayers.get(x).neurons.size(); y++) {
+
+                // Pick from mother
+                if (current <= index_b && index_a <= current) {
+                    SigmoidNeuron hNeuron = f.brain.neuralLayers.get(x).neurons.get(y).makeClone();
+                    child.brain.neuralLayers.get(x).neurons.set(y, hNeuron);
+                }
+
+                // Pick from father
+                else {
+                    SigmoidNeuron hNeuron = this.brain.neuralLayers.get(x).neurons.get(y).makeClone();
+                    child.brain.neuralLayers.get(x).neurons.set(y, hNeuron);
+                }
+
+                current++;
             }
-            // Pick mothers gene, 50% chance
-            else {
-                gene = chromosome_y.get(0);
-            }
-            child.genes.add(gene);
-            chromosome_x.remove(Integer.valueOf(gene));
-            chromosome_y.remove(Integer.valueOf(gene));
+
         }
 
-        // Mutation, 10% chance
-        if (Math.random() < 0.2) {
 
-        }
 
         return child;
     }

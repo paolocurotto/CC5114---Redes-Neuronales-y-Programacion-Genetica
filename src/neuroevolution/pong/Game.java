@@ -23,6 +23,7 @@ public class Game extends JPanel implements Options {
     private Ball ball;
     int score_A = 0;
     int score_B = 0;
+    int playballs = 0;
     int i = 0;
 
     Game() {
@@ -64,7 +65,7 @@ public class Game extends JPanel implements Options {
         for (int i = 0; i < paddles.size(); i++) {
             // [paddle y, ball x, ball y, ball v_x, ball v_y]
             int mov = ga.population.get(i).movePaddle(new double[]{
-                    Double.valueOf(paddles.get(i).A.getCenterY()),
+                    (double) paddles.get(i).A.getCenterY(),
                     ball.real_x,
                     ball.real_y,
                     ball.vx,
@@ -112,13 +113,21 @@ public class Game extends JPanel implements Options {
     private void checkScore() {
         // Point for B
         if (ball.real_x < 0) {
+            playballs++;
             score_B++;
             ball.resetBall();
         }
         // Point for A
         if (ball.real_x > WINDOW_WIDTH) {
+            playballs++;
             score_A++;
             ball.resetBall();
+        }
+
+        if (playballs == 10) {
+            for (int i = 0; i < paddles.size(); i++) {
+               ga.population.get(i).calculateFitness(paddles.get(i).A.hits + paddles.get(i).B.hits);
+            }
         }
     }
 
