@@ -46,7 +46,15 @@ public class SigmoidNeuron {
 
     public SigmoidNeuron makeClone() {
         SigmoidNeuron s = new SigmoidNeuron();
-        s.weights.addAll(this.weights);
+        for (double w : this.weights) {
+            if (Math.random() < 0.001) {
+                w = -w;
+            }
+            if (Math.random() < 0.01) {
+                w = w * 1.1;
+            }
+            s.weights.add(w);
+        }
         s.threshold = this.threshold;
         return  s;
     }

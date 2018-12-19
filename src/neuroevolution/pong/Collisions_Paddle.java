@@ -3,6 +3,7 @@ package neuroevolution.pong;
 public class Collisions_Paddle implements Options {
 
     private Paddle paddle;
+    public Game game;
 
     int y_threshold = PADDLE_HEIGHT/2 + BALL_RADIUS;
     int x_threshold = PADDLE_WIDTH/2 + BALL_RADIUS;
@@ -14,8 +15,9 @@ public class Collisions_Paddle implements Options {
     /**
      * Paddle collision with ball
      **/
-    void checkCollision(Ball ball) {
+    boolean checkCollision(Ball ball) {
         // Collision
+        boolean col = false;
         double actual_y = Math.abs(paddle.getCenterY() - ball.real_y);
         double actual_x = Math.abs(paddle.getCenterX() - ball.real_x);
         if (actual_x <= x_threshold && actual_y <= y_threshold) {
@@ -31,15 +33,18 @@ public class Collisions_Paddle implements Options {
                 // from right
                 if (paddle.getCenterX() < ball.real_x) {
                     ball.real_x = paddle.getCenterX() + PADDLE_WIDTH/2 + BALL_RADIUS + 1;
-                    ball.vx = -ball.vx;
+                    ball.vx = Math.abs(ball.vx);
                 }
                 // from left
                 else if (paddle.getCenterX() > ball.real_x) {
                     ball.real_x = paddle.getCenterX() - PADDLE_WIDTH/2 - BALL_RADIUS - 1;
-                    ball.vx = -ball.vx;
+                    ball.vx = -Math.abs(ball.vx);
                 }
+                return true;
             }
+            return false;
 
+            /*
             // Vertical collision
             else if (H_ratio <= V_ratio) {
                 double y_impulse = 0.2;
@@ -66,7 +71,9 @@ public class Collisions_Paddle implements Options {
                     }
                 }
             }
+            */
         }
+        return false;
     }
 
 }

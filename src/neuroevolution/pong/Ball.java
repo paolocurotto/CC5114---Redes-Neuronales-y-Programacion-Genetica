@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Ball implements Options {
 
     private int x;
-    private int y;
+    int y;
     double real_x;
     double real_y;
     double angle_p = 2;
@@ -36,10 +36,9 @@ public class Ball implements Options {
         y = (int) real_y;
     }
 
-    void checkCollisions(Paddle a, Paddle b) {
+    boolean checkCollisions(Paddle a, Paddle b) {
         collisionsBall.checkCollisionsEdges();
-        collisionsBall.checkCollisionPaddle(a);
-        collisionsBall.checkCollisionPaddle(b);
+        return collisionsBall.checkCollisionPaddle(a) || collisionsBall.checkCollisionPaddle(b);
     }
 
     public void resetBall() {

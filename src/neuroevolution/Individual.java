@@ -13,12 +13,13 @@ import java.util.stream.Collectors;
 
 public class Individual {
     NeuralNetwork brain;
-    List<Integer> genes = new ArrayList<>(); // Genes represent tiles on the board
+    List<Integer> genes = new ArrayList<>();
     int fitness = 0;
+    int lives = 10;
 
     // Initialize individual with random genes
     Individual() {
-        brain = new NeuralNetwork(new int[]{5, 3, 4, 3});
+        brain = new NeuralNetwork(new int[]{5, 18, 3});
     }
 
     /*
@@ -38,7 +39,7 @@ public class Individual {
         int nGenes = this.brain.n_neurons;
 
         int index_a = ThreadLocalRandom.current().nextInt(0, nGenes);
-        int index_b = ThreadLocalRandom.current().nextInt(index_a + 1, nGenes + 1);
+        int index_b = ThreadLocalRandom.current().nextInt(index_a,  nGenes);
         int current = 0;
         for (int x = 0; x < child.brain.neuralLayers.size(); x++) {
 
@@ -55,20 +56,14 @@ public class Individual {
                     SigmoidNeuron hNeuron = this.brain.neuralLayers.get(x).neurons.get(y).makeClone();
                     child.brain.neuralLayers.get(x).neurons.set(y, hNeuron);
                 }
-
                 current++;
             }
-
         }
-
-
-
         return child;
     }
 
     public int movePaddle(double[] info) {
         List<Double> outputs =Arrays.stream(info).boxed().collect(Collectors.toList());
-        int dir = brain.evaluate_index(outputs);
-        return dir;
+        return brain.evaluate_index(outputs);
     }
 }

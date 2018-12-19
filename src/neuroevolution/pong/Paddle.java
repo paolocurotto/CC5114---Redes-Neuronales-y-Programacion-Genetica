@@ -4,17 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Paddle implements Options {
-    private int x;
+    int x;
     private int y;
-    private double real_y;
+    double real_y;
     int y_direction = 0;
     private Collisions_Paddle collisionsPaddle;
     Color color;
     int hits = 0;
+    boolean col = false;
 
     Paddle(int init_x) {
         x = init_x;
-        y = (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2);
+        y = PADDLE_Y_POS;
         real_y = y;
         collisionsPaddle = new Collisions_Paddle(this);
     }
@@ -45,7 +46,7 @@ public class Paddle implements Options {
         return y + PADDLE_HEIGHT / 2;
     }
 
-    void checkCollisionBall(Ball ball) {
-        collisionsPaddle.checkCollision(ball);
+    boolean checkCollisionBall(Ball ball) {
+        return collisionsPaddle.checkCollision(ball);
     }
 }

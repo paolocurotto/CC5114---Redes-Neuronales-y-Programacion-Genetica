@@ -7,13 +7,11 @@ import java.util.stream.IntStream;
 
 public class GeneticAlgorithm {
 
-    public int pop_size = 20; // Population size
+    public int pop_size = 50; // Population size
     public int k = pop_size; // For tournament selection
     public List<Individual> population = new ArrayList<>();
     public List<Individual> new_generation = new ArrayList<>(); // Population's offspring generation
-
     int generationCounter = 0;
-    int fitnessTarget = 10;
 
     public GeneticAlgorithm() {
         IntStream.range(0, pop_size).forEach(i -> population.add(new Individual()));
@@ -21,6 +19,10 @@ public class GeneticAlgorithm {
 
     /** Genetic algorithm **/
     public void select() {
+
+        population.sort((a, b) ->  b.fitness - a.fitness);
+        System.out.println("Generation: " + ++generationCounter + ", best/worst: " + population.get(0).fitness + " / "+
+                population.get(population.size()-1).fitness);
 
         // Tournament selection
         for (int n = 0; n < pop_size; n++) {
@@ -50,12 +52,11 @@ public class GeneticAlgorithm {
         new_generation.clear();
 
         // Evaluate fitness
-        population.forEach(individual -> individual.calculateFitness(fitnessTarget));
-        population.sort((a, b) ->  b.fitness - a.fitness);
+        //population.forEach(individual -> individual.calculateFitness(fitnessTarget));
+        //population.sort((a, b) ->  b.fitness - a.fitness);
 
         // Print info
-        System.out.println("Generation: " + ++generationCounter +
-                ", best/target: (" + population.get(0).fitness + "/" + fitnessTarget + ")");
+        //System.out.println("Generation: " + ++generationCounter + ", best: (" + population.get(0).fitness + "/" )");
 
     }
 }

@@ -33,7 +33,7 @@ public class Collisions_Ball implements Options {
     }
 
     /**  Collision with paddles **/
-    void checkCollisionPaddle(Paddle p) {
-        p.checkCollisionBall(ball);
+    boolean checkCollisionPaddle(Paddle p) {
+        return p.checkCollisionBall(ball);
     }
 }

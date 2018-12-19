@@ -14,7 +14,7 @@ public class Game extends JPanel implements Options {
     GeneticAlgorithm ga = new GeneticAlgorithm();
 
     private static final long serialVersionUID = 1L;
-    private int DELAY = 1000;
+    private int DELAY = 500;
     private int PERIOD = 5;
     private Paddle paddle_A;
     private Paddle paddle_B;
@@ -28,10 +28,8 @@ public class Game extends JPanel implements Options {
 
     Game() {
         for (int i = 0; i < ga.pop_size; i++) {
-            Paddles ps =
-                    new Paddles(new Paddle((int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2),
-                    new Paddle((int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2));
-            Color randomColor = new Color((int)(Math.random() * 0x1000000));
+            Paddles ps = new Paddles(new Paddle(PADDLE_A_X_POS), new Paddle(PADDLE_B_X_POS));
+            Color randomColor = new Color((int) (i * 5.1), 0 , 0);
             ps.A.color = randomColor;
             ps.B.color = randomColor;
             paddles.add(ps);
@@ -59,10 +57,10 @@ public class Game extends JPanel implements Options {
     private void tick() {
         moveObjects();
         checkCollisions();
-        checkScore();
-        repaint();
 
         for (int i = 0; i < paddles.size(); i++) {
+            if (paddles.get(i).dead)
+                continue;
             // [paddle y, ball x, ball y, ball v_x, ball v_y]
             int mov = ga.population.get(i).movePaddle(new double[]{
                     (double) paddles.get(i).A.getCenterY(),
@@ -71,24 +69,78 @@ public class Game extends JPanel implements Options {
                     ball.vx,
                     ball.vy,
             });
-            paddles.get(i).A.y_direction = mov;
-            paddles.get(i).B.y_direction = mov;
+            paddles.get(i).A.y_direction = PLAYER_ACTION.get(mov);
+            paddles.get(i).B.y_direction = PLAYER_ACTION.get(mov);
         }
 
+        checkScore();
+        repaint();
     }
 
     private void moveObjects() {
         ball.move();
         for (Paddles paddles : paddles) {
+            if (paddles.dead)
+                continue;
             paddles.A.move();
             paddles.B.move();
         }
     }
 
     private void checkCollisions() {
-        for (Paddles paddles : paddles) {
-            ball.checkCollisions(paddles.A, paddles.B);
+        boolean thereWasCollision = false;
+        int nhits = 0;
+
+        for (Paddles pads : paddles) {
+            if (pads.dead)
+                continue;
+                //System.out.println("x="+(ball.real_x-BALL_RADIUS) + ", y="+(pads.A.getCenterX()+PADDLE_WIDTH/2));
+            if (ball.checkCollisions(pads.A, pads.B)) {
+                //System.out.println("firstx="+(ball.real_x-BALL_RADIUS) + ", y="+(pads.A.getCenterX()+PADDLE_WIDTH/2));
+                thereWasCollision = true;
+                pads.col = true;
+                //nhits++;
+            }
         }
+        if (thereWasCollision) {
+            System.out.print("lives=");
+            for (Paddles pads : paddles) {
+                System.out.print(pads.lives+"-");
+                if (pads.dead)
+                    continue;
+                if ((pads.A.getCenterY() + PADDLE_HEIGHT/2 + BALL_RADIUS > ball.real_y) &&
+                        (pads.A.getCenterY() - PADDLE_HEIGHT/2 - BALL_RADIUS < ball.real_y)) {
+
+                    nhits++;
+                    continue;
+                }
+                if (pads.lives > 0) {
+                    pads.lives--;
+                } else {
+                    pads.dead = true;
+                }
+            }
+            System.out.println();
+            System.out.println("Hits = " + nhits + " / " + 50);
+
+        }
+        /*
+        if(thereWasCollision == true) {
+            playballs++;
+            ball.resetBall();
+            if (playballs == 10) {
+                for (int i = 0; i < paddles.size(); i++) {
+                    ga.population.get(i).calculateFitness(paddles.get(i).A.hits + paddles.get(i).B.hits);
+                }
+                ga.select();
+                for (Paddles paddles : paddles) {
+                    paddles.reset_paddles();
+                }
+                playballs = 0;
+                score_A = 0;
+                score_B = 0;
+            }
+        }*/
     }
 
     private void drawBackground(Graphics2D g2d) {
@@ -99,12 +151,15 @@ public class Game extends JPanel implements Options {
         g2d.setFont(new Font("Georgia", Font.BOLD, 80));
         g2d.drawString(score_A + "", WINDOW_WIDTH/2 - 130, 100);
         g2d.drawString(score_B + "", WINDOW_WIDTH/2 + 80, 100);
+        g2d.drawString(playballs + "", WINDOW_WIDTH/2 -20, 100);
         g2d.setComposite(c);
     }
 
     private void drawObjects(Graphics2D g2d) {
         ball.draw(g2d);
         for (Paddles paddles : paddles) {
+            if (paddles.dead)
+                continue;
             paddles.A.draw(g2d);
             paddles.B.draw(g2d);
         }
@@ -128,15 +183,34 @@ public class Game extends JPanel implements Options {
             for (int i = 0; i < paddles.size(); i++) {
                ga.population.get(i).calculateFitness(paddles.get(i).A.hits + paddles.get(i).B.hits);
             }
+            ga.select();
+            for (Paddles paddles : paddles) {
+                paddles.reset_paddles();
+            }
+            playballs = 0;
+            score_A = 0;
+            score_B = 0;
         }
+
+
     }
 
     class Paddles {
+        public boolean col;
+        int lives = 10;
+        boolean dead = false;
         Paddle A;
         Paddle B;
-
-        public Paddles(Paddle paddle, Paddle paddle1) {
+        Paddles(Paddle paddle, Paddle paddle1) {
             A = paddle; B = paddle1;
+        }
+        public void reset_paddles() {
+            dead = false;
+            lives = 10;
+            A.hits = 0;
+            B.hits = 0;
+            A.real_y = PADDLE_Y_POS;
+            B.real_y = PADDLE_Y_POS;
         }
     }
 
