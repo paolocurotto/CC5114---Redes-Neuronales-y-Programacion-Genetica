@@ -23,13 +23,14 @@ public class Game extends JPanel implements Options {
     private Ball ball;
     int score_A = 0;
     int score_B = 0;
-    int playballs = 0;
+    int playballs = PLAYBALLS;
+    int playtime = PLAYTIME;
     int i = 0;
 
     Game() {
         for (int i = 0; i < ga.pop_size; i++) {
             Paddles ps = new Paddles(new Paddle(PADDLE_A_X_POS), new Paddle(PADDLE_B_X_POS));
-            Color randomColor = new Color((int) (i * 5.1), 0 , 0);
+            Color randomColor = new Color((int) (i * 5.1), 0 , 50);
             ps.A.color = randomColor;
             ps.B.color = randomColor;
             paddles.add(ps);
@@ -94,24 +95,20 @@ public class Game extends JPanel implements Options {
         for (Paddles pads : paddles) {
             if (pads.dead)
                 continue;
-                //System.out.println("x="+(ball.real_x-BALL_RADIUS) + ", y="+(pads.A.getCenterX()+PADDLE_WIDTH/2));
             if (ball.checkCollisions(pads.A, pads.B)) {
-                //System.out.println("firstx="+(ball.real_x-BALL_RADIUS) + ", y="+(pads.A.getCenterX()+PADDLE_WIDTH/2));
                 thereWasCollision = true;
                 pads.col = true;
-                //nhits++;
             }
         }
         if (thereWasCollision) {
-            System.out.print("lives=");
+            playtime--;
             for (Paddles pads : paddles) {
-                System.out.print(pads.lives+"-");
                 if (pads.dead)
                     continue;
                 if ((pads.A.getCenterY() + PADDLE_HEIGHT/2 + BALL_RADIUS > ball.real_y) &&
                         (pads.A.getCenterY() - PADDLE_HEIGHT/2 - BALL_RADIUS < ball.real_y)) {
-
                     nhits++;
+                    pads.hits++;
                     continue;
                 }
                 if (pads.lives > 0) {
@@ -120,27 +117,22 @@ public class Game extends JPanel implements Options {
                     pads.dead = true;
                 }
             }
-            System.out.println();
-            System.out.println("Hits = " + nhits + " / " + 50);
 
-        }
-        /*
-        if(thereWasCollision == true) {
-            playballs++;
-            ball.resetBall();
-            if (playballs == 10) {
+            if (playtime == 0) {
                 for (int i = 0; i < paddles.size(); i++) {
-                    ga.population.get(i).calculateFitness(paddles.get(i).A.hits + paddles.get(i).B.hits);
+                    ga.population.get(i).calculateFitness(paddles.get(i).hits);
                 }
                 ga.select();
                 for (Paddles paddles : paddles) {
                     paddles.reset_paddles();
                 }
-                playballs = 0;
-                score_A = 0;
-                score_B = 0;
+                playballs = PLAYBALLS;
+                playtime = PLAYTIME;
+                ball.resetBall();
             }
-        }*/
+
+        }
+
     }
 
     private void drawBackground(Graphics2D g2d) {
@@ -149,9 +141,11 @@ public class Game extends JPanel implements Options {
         Composite c = g2d.getComposite();
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .3f));
         g2d.setFont(new Font("Georgia", Font.BOLD, 80));
-        g2d.drawString(score_A + "", WINDOW_WIDTH/2 - 130, 100);
-        g2d.drawString(score_B + "", WINDOW_WIDTH/2 + 80, 100);
+        //g2d.drawString(score_A + "", WINDOW_WIDTH/2 - 130, 100);
+        //g2d.drawString(score_B + "", WINDOW_WIDTH/2 + 80, 100);
         g2d.drawString(playballs + "", WINDOW_WIDTH/2 -20, 100);
+        g2d.setFont(new Font("Georgia", Font.BOLD, 30));
+        g2d.drawString(playtime + "", WINDOW_WIDTH/2 -100, 90);
         g2d.setComposite(c);
     }
 
@@ -167,7 +161,7 @@ public class Game extends JPanel implements Options {
 
     private void checkScore() {
         // Point for B
-        if (ball.real_x < 0) {
+        /*if (ball.real_x < 0) {
             playballs++;
             score_B++;
             ball.resetBall();
@@ -178,26 +172,35 @@ public class Game extends JPanel implements Options {
             score_A++;
             ball.resetBall();
         }
+        */
+        if (ball.real_x < 0 || WINDOW_WIDTH < ball.real_x) {
+            for (Paddles pads : paddles) {
+                if (pads.dead) {
+                    continue;
+                }
+                pads.lives--;
+            }
+            playballs--;
+            ball.resetBall();
+        }
 
-        if (playballs == 10) {
+        if (playballs == 0) {
             for (int i = 0; i < paddles.size(); i++) {
-               ga.population.get(i).calculateFitness(paddles.get(i).A.hits + paddles.get(i).B.hits);
+               ga.population.get(i).calculateFitness(paddles.get(i).hits);
             }
             ga.select();
             for (Paddles paddles : paddles) {
                 paddles.reset_paddles();
             }
-            playballs = 0;
-            score_A = 0;
-            score_B = 0;
+            playballs = PLAYBALLS;
+            playtime = PLAYTIME;
         }
-
-
     }
 
     class Paddles {
         public boolean col;
         int lives = 10;
+        int hits = 0;
         boolean dead = false;
         Paddle A;
         Paddle B;
@@ -206,6 +209,7 @@ public class Game extends JPanel implements Options {
         }
         public void reset_paddles() {
             dead = false;
+            hits = 0;
             lives = 10;
             A.hits = 0;
             B.hits = 0;

@@ -5,12 +5,11 @@ import java.awt.Graphics2D;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Ball implements Options {
-
     private int x;
     int y;
     double real_x;
     double real_y;
-    double angle_p = 2;
+    double angle_p = 2.6;
     double vx = BALL_SPEED * Math.cos(angle_p);
     double vy = BALL_SPEED * Math.sin(angle_p);
     Collisions_Ball collisionsBall = new Collisions_Ball(this);
@@ -44,17 +43,15 @@ public class Ball implements Options {
     public void resetBall() {
         real_x = WINDOW_WIDTH / 2;
         real_y = WINDOW_HEIGHT / 2;
-        double ang = ThreadLocalRandom.current().nextDouble(0.350,1.047);
-        double r = Math.random();
-        if (r < 0.25) {
-        } else if (r < 0.5) {
-            ang = ang + Math.PI/2;
-        } else if (r < 0.75) {
-            ang = ang + Math.PI;
-        } else {
-            ang = ang + (3/4.0)*Math.PI;
-        }
+        double ang = ThreadLocalRandom.current().nextDouble(0.350,1.0471); // 20 - 60
         vx = BALL_SPEED * Math.cos(ang);
         vy = BALL_SPEED * Math.sin(ang);
+
+        if (Math.random() < 0.5) {
+            vx = -vx;
+        }
+        if (Math.random() < 0.5) {
+            vy = -vy;
+        }
     }
 }

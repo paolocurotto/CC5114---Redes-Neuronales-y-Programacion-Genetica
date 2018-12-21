@@ -50,7 +50,7 @@ public class NeuralNetwork {
         return neuralLayers.get(neuralLayers.size() - 1).getOutputs();
     }
 
-    // Index of output
+    // Index of output list param
     public int evaluate_index(List<Double> inputs) {
         neuralLayers.get(0).feedLayer((ArrayList<Double>) inputs);
         // Find index of highest value in prediction (= answer)
@@ -62,6 +62,19 @@ public class NeuralNetwork {
             }
         }
         return index;
+    }
+
+    // Index of output array param
+    public int evaluate_index(double[] inputs) {
+        return neuralLayers.get(0).feedLayer(inputs);
+        /*int index = 0;
+        List<Double> outs = neuralLayers.get(neuralLayers.size() - 1).getOutputs();
+        for (int i = 1; i < outs.size(); i++) {
+            if (outs.get(index) < outs.get(i)) {
+                index = i;
+            }
+        }
+        return index;*/
     }
 
     // Main_Tarea method

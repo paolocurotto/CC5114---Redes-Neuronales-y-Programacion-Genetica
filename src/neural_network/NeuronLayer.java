@@ -26,6 +26,28 @@ public class NeuronLayer {
         }
     }
 
+    // return index of output
+    int feedLayer(double[] inputs) {
+        // Feed each neuron
+        for (SigmoidNeuron neuron : neurons) {
+            neuron.feed(inputs);
+        }
+
+        // Continue with next layer
+        if (nextLayer != null) {
+            return nextLayer.feedLayer(getOutputsAsArray());
+        } else {
+            // return highest index
+            int index = 0;
+            for (int i = 1; i < neurons.size(); i++) {
+                if (neurons.get(index).getOutput() < neurons.get(i).getOutput()) {
+                    index = i;
+                }
+            }
+            return index;
+        }
+    }
+
     // Backward propagation in output layer
     void backwardPropagate(ArrayList<Double> expectedOutputs) {
         // Set delta for each output neuron
@@ -90,6 +112,14 @@ public class NeuronLayer {
             outputList.add(n.getOutput());
         }
         return outputList;
+    }
+
+    double[] getOutputsAsArray() {
+        double[] outputArray = new double[neurons.size()];
+        for (int i = 0; i < neurons.size(); i++) {
+            outputArray[i] = neurons.get(i).getOutput();
+        }
+        return outputArray;
     }
 
     public ArrayList<SigmoidNeuron> getNeurons() { return this.neurons; }

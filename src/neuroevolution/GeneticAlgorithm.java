@@ -22,7 +22,7 @@ public class GeneticAlgorithm {
 
         population.sort((a, b) ->  b.fitness - a.fitness);
         System.out.println("Generation: " + ++generationCounter + ", best/worst: " + population.get(0).fitness + " / "+
-                population.get(population.size()-1).fitness);
+                population.get(population.size()-1).fitness + " | ");
 
         // Tournament selection
         for (int n = 0; n < pop_size; n++) {
@@ -59,4 +59,6 @@ public class GeneticAlgorithm {
         //System.out.println("Generation: " + ++generationCounter + ", best: (" + population.get(0).fitness + "/" )");
 
     }
+
+
 }

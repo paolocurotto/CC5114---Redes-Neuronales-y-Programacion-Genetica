@@ -34,6 +34,15 @@ public class SigmoidNeuron {
         this.output = 1 / (1 + Math.exp(-z));
     }
 
+    void feed(double[] inputs) {
+        double z = 0;
+        for (int i = 0; i < inputs.length; i++) {
+            z = z + (inputs[i] * weights.get(i));
+        }
+        z = z + threshold;
+        this.output = 1 / (1 + Math.exp(-z));
+    }
+
     public ArrayList<Double> getWeights() { return weights; }
     public void setWeights(ArrayList<Double> w) { this.weights = w; }
     double getLearningRate() { return  learningRate; }
