@@ -11,7 +11,6 @@ public class Paddles {
     double real_y;
     int x1;
     int x2;
-    int lives;
     int y_direction = PADDLE_IDLE;
 
     Paddles() {

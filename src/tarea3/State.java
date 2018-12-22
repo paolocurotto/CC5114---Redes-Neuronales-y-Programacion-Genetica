@@ -27,4 +27,7 @@ public class State {
         current_pads.addAll(pads);
     }
 
+    void individualDied(Individual ind) {
+
+    }
 }

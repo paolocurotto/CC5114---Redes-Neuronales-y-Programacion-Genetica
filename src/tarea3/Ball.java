@@ -2,9 +2,7 @@ package tarea3;
 
 import java.awt.*;
 
-import static tarea3.Globals.BALL_INITIAL_X_POS;
-import static tarea3.Globals.BALL_INITIAL_Y_POS;
-import static tarea3.Globals.BALL_SPEED;
+import static tarea3.Globals.*;
 
 public class Ball {
 
@@ -16,6 +14,7 @@ public class Ball {
     double angle_p = 2.6;
     double vx = BALL_SPEED * Math.cos(angle_p);
     double vy = BALL_SPEED * Math.sin(angle_p);
+    boolean active = true;
 
     Ball() {
         x = BALL_INITIAL_X_POS;
@@ -31,4 +30,37 @@ public class Ball {
         y = (int) real_y;
     }
 
+    void checkCollisionTopEdge() {
+        if (real_y < BALL_TOP_EDGE_HIT_THRESHOLD) {
+            real_y = BALL_TOP_EDGE_HIT_THRESHOLD;
+            vy = Math.abs(vy);
+            y = (int) real_y;
+        }
+    }
+
+    void checkCollisionBottomEdge() {
+        if (real_y > BALL_BOTTOM_EDGE_HIT_THRESHOLD) {
+            real_y = BALL_BOTTOM_EDGE_HIT_THRESHOLD;
+            vy = -Math.abs(vy);
+            y = (int) real_y;
+        }
+    }
+
+    boolean checkCollisionLeftPaddle() {
+        if (active && x < BALL_PADDLE_A_HIT_THRESHOLD) {
+
+            active = false;
+            return true;
+        }
+        return false;
+    }
+
+    boolean checkCollisionRightPaddle() {
+        if (active && x > BALL_PADDLE_B_HIT_THRESHOLD) {
+
+            active = false;
+            return true;
+        }
+        return false;
+    }
 }

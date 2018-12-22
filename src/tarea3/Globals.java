@@ -5,11 +5,15 @@ import java.util.Map;
 
 class Globals {
 
+    // Game
     static final int DELAY = 500;
     static final int PERIOD = 20;
     static final int PLAYTIME = 10;
     static final int PLAYBALLS = 5;
+    static final int LIVES = 10;
 
+
+    // Genetic algorithm
     static final int POPULATION_SIZE = 50;
     static final int K_FACTOR = POPULATION_SIZE;
 
@@ -26,6 +30,17 @@ class Globals {
     static final int PADDLE_B_INITIAL_X_POS = (int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2;
     static final int PADDLE_INITIAL_Y_POS = (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2);
 
+    // Ball
+    static final double BALL_SPEED = 5;
+    static final int BALL_RADIUS = 10;
+    static final int BALL_INITIAL_X_POS = WINDOW_WIDTH / 2;
+    static final int BALL_INITIAL_Y_POS = WINDOW_HEIGHT / 2;
+    static final int BALL_PADDLE_A_HIT_THRESHOLD = PADDLE_A_INITIAL_X_POS + PADDLE_WIDTH + BALL_RADIUS;
+    static final int BALL_PADDLE_B_HIT_THRESHOLD = PADDLE_B_INITIAL_X_POS - BALL_RADIUS;
+    static final int BALL_TOP_EDGE_HIT_THRESHOLD = BALL_RADIUS;
+    static final int BALL_BOTTOM_EDGE_HIT_THRESHOLD = WINDOW_HEIGHT - BALL_RADIUS;
+    static final int BALL_LEFT_EDGE_HIT_THRESHOLD = BALL_RADIUS;
+    static final int BALL_RIGHT_EDGE_HIT_THRESHOLD = WINDOW_WIDTH - BALL_RADIUS;
 
     static final int PADDLE_UP = -1;
     static final int PADDLE_IDLE = 0;
@@ -36,9 +51,4 @@ class Globals {
         put(2, PADDLE_DOWN);
     }};
 
-    // Ball
-    static final double BALL_SPEED = 5;
-    static final int BALL_RADIUS = 10;
-    static final int BALL_INITIAL_X_POS = WINDOW_WIDTH / 2;
-    static final int BALL_INITIAL_Y_POS = WINDOW_HEIGHT / 2;
 }
