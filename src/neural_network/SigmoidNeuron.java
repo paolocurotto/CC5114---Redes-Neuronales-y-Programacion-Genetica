@@ -1,7 +1,11 @@
 package neural_network;
 
+import tarea3.Globals.*;
+
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static tarea3.Globals.Mutation.*;
 
 public class SigmoidNeuron {
 
@@ -10,6 +14,7 @@ public class SigmoidNeuron {
     private double threshold;
     private double delta;
     private double output;
+    public Mutation mutation = NO_MUTATION;
 
     SigmoidNeuron() {
     }
@@ -55,16 +60,21 @@ public class SigmoidNeuron {
 
     public SigmoidNeuron makeClone() {
         SigmoidNeuron s = new SigmoidNeuron();
+        Mutation m = NO_MUTATION;
         for (double w : this.weights) {
-            if (Math.random() < 0.001) {
+            double r = Math.random();
+            if (r < 0.005) {
                 w = -w;
+                m = SIGN_INVERT_MUTATION;
             }
-            if (Math.random() < 0.01) {
-                w = w * 1.1;
+            if (r > 0.99) {
+                w = w * 1.2;
+                m = AMP_MUTATION;
             }
             s.weights.add(w);
         }
         s.threshold = this.threshold;
+        s.mutation = m;
         return  s;
     }
 }

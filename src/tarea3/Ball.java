@@ -1,6 +1,7 @@
 package tarea3;
 
 import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static tarea3.Globals.*;
 
@@ -11,7 +12,7 @@ public class Ball {
     int y;
     double real_x;
     double real_y;
-    double angle_p = 2.6;
+    double angle_p = 1;
     double vx = BALL_SPEED * Math.cos(angle_p);
     double vy = BALL_SPEED * Math.sin(angle_p);
     boolean active = true;
@@ -47,20 +48,38 @@ public class Ball {
     }
 
     boolean checkCollisionLeftPaddle() {
-        if (active && x < BALL_PADDLE_A_HIT_THRESHOLD) {
-
-            active = false;
-            return true;
-        }
-        return false;
+        return active && (x < BALL_PADDLE_A_HIT_THRESHOLD);
     }
 
     boolean checkCollisionRightPaddle() {
-        if (active && x > BALL_PADDLE_B_HIT_THRESHOLD) {
+        return active && (x > BALL_PADDLE_B_HIT_THRESHOLD);
+    }
 
-            active = false;
-            return true;
+    boolean checkCollisionLeftEdge() {
+        return !active && (x < BALL_LEFT_EDGE_HIT_THRESHOLD);
+    }
+
+    boolean checkCollisionRightEdge() {
+        return !active && (x > BALL_RIGHT_EDGE_HIT_THRESHOLD);
+    }
+
+    void resetBall() {
+        real_x = BALL_INITIAL_X_POS;
+        real_y = BALL_INITIAL_Y_POS;
+        double min_ang = Math.asin(PADDLE_SPEED / BALL_SPEED) + 0.2; //
+        double max_ang = 1.4;
+        double ang = ThreadLocalRandom.current().nextDouble(min_ang, max_ang); // 40 - 70
+        vx = BALL_SPEED * Math.cos(ang);
+        vy = BALL_SPEED * Math.sin(ang);
+        if (Math.random() < 0.5) {
+            vx = -vx;
         }
-        return false;
+        if (Math.random() < 0.5) {
+            vy = -vy;
+        }
+    }
+
+    void changeXDirection() {
+        vx = -vx;
     }
 }

@@ -43,7 +43,10 @@ public class Ball implements Options {
     public void resetBall() {
         real_x = WINDOW_WIDTH / 2;
         real_y = WINDOW_HEIGHT / 2;
-        double ang = ThreadLocalRandom.current().nextDouble(0.350,1.0471); // 20 - 60
+        double min_ang = Math.asin(PADDLE_SPEED / BALL_SPEED);
+        System.out.println("rat="+ ((PADDLE_SPEED / BALL_SPEED)));
+        System.out.println("MINGANG="+ min_ang);
+        double ang = ThreadLocalRandom.current().nextDouble(min_ang,1.1471); // 40 - 70
         vx = BALL_SPEED * Math.cos(ang);
         vy = BALL_SPEED * Math.sin(ang);
 

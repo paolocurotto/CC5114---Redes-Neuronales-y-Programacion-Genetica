@@ -1,8 +1,11 @@
 package neuroevolution;
 
 
+import tarea3.Individual;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Tarea3 {
 
@@ -11,39 +14,34 @@ public class Tarea3 {
         List<A> aaa = new ArrayList<>();
         List<A> bbb = new ArrayList<>();
 
-        A a1 = new A(1);
-        A a2 = new A(2);
-        A a3 = new A(3);
+
+        A a1 = new A(0.2);
+        A a2 = new A(0.1);
+        A a3 = new A(0.3);
+        A a4 = new A(0.2);
 
         aaa.add(a1);
         aaa.add(a2);
         aaa.add(a3);
+        aaa.add(a4);
 
-        for (A a : aaa) {
-            if (a.n != 2) {
-                bbb.add(a);
-            }
-        }
-        aaa.remove(0);
-        aaa.remove(1);
-
-        for (A a : aaa) {
-            System.out.println(a.n);
-        }
+        aaa.forEach(a -> System.out.println(a.n));
         System.out.println();
 
-        for (A b : bbb) {
-            System.out.println(b.n);
+        aaa.sort((a, b) -> (b.n - a.n > 0) ? 1 : (b.n < a.n) ? -1 : 0);
 
-        }
+
+        aaa.forEach(a -> System.out.println(a.n));
+
+
 
 
 
     }
 
     static class A {
-        int n;
-        A(int n){
+        double n;
+        A(double n){
             this.n=n;}
     }
 }

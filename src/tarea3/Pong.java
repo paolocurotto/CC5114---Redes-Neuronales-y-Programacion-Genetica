@@ -33,7 +33,7 @@ public class Pong extends JPanel {
         Toolkit.getDefaultToolkit().sync();
     }
 
-    private void tick() {
+    private synchronized void tick() {
         repaint();
         engine.performActions();
     }
@@ -50,12 +50,20 @@ public class Pong extends JPanel {
         g2d.setComposite(c);
     }
 
-    private void drawPaddles(Graphics2D g2d) {
+    private synchronized void drawPaddles(Graphics2D g2d) {
         Color c1 = g2d.getColor();
-        for (Paddles pad : state.current_pads) {
-            g2d.setColor(pad.color);
-            g2d.fillRect(pad.x1, pad.y, PADDLE_WIDTH, PADDLE_HEIGHT);
-            g2d.fillRect(pad.x2, pad.y, PADDLE_WIDTH, PADDLE_HEIGHT);
+        for (Individual individual : state.current_individuals) {
+            g2d.setColor(individual.color);
+            g2d.fillRect(individual.x1, individual.y, PADDLE_WIDTH, PADDLE_HEIGHT);
+            g2d.fillRect(individual.x2, individual.y, PADDLE_WIDTH, PADDLE_HEIGHT);
+
+            g2d.setColor(Color.BLUE);
+            g2d.fillRect(individual.x1, individual.y , PADDLE_WIDTH, 1*individual.n_sign_mutations);
+            g2d.fillRect(individual.x2, individual.y , PADDLE_WIDTH, 1*individual.n_sign_mutations);
+            g2d.setColor(Color.RED);
+            g2d.fillRect(individual.x1, individual.y + PADDLE_HEIGHT - 1*individual.n_amp_mutations, PADDLE_WIDTH, 1*individual.n_amp_mutations);
+            g2d.fillRect(individual.x2, individual.y + PADDLE_HEIGHT - 1*individual.n_amp_mutations, PADDLE_WIDTH, 1*individual.n_amp_mutations);
+
         }
         g2d.setColor(c1);
     }

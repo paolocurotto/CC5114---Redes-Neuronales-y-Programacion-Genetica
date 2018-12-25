@@ -3,15 +3,14 @@ package tarea3;
 import java.util.HashMap;
 import java.util.Map;
 
-class Globals {
+public class Globals {
 
     // Game
+    static final int PERIOD = 5;
     static final int DELAY = 500;
-    static final int PERIOD = 20;
-    static final int PLAYTIME = 10;
-    static final int PLAYBALLS = 5;
+    static final int PLAYTIME = 20;
+    static final int PLAYBALLS = 10;
     static final int LIVES = 10;
-
 
     // Genetic algorithm
     static final int POPULATION_SIZE = 50;
@@ -31,7 +30,7 @@ class Globals {
     static final int PADDLE_INITIAL_Y_POS = (WINDOW_HEIGHT / 2) - (PADDLE_HEIGHT / 2);
 
     // Ball
-    static final double BALL_SPEED = 5;
+    static final double BALL_SPEED = 6;
     static final int BALL_RADIUS = 10;
     static final int BALL_INITIAL_X_POS = WINDOW_WIDTH / 2;
     static final int BALL_INITIAL_Y_POS = WINDOW_HEIGHT / 2;
@@ -50,5 +49,11 @@ class Globals {
         put(1, PADDLE_IDLE);
         put(2, PADDLE_DOWN);
     }};
+
+    public enum Mutation {
+        NO_MUTATION,
+        SIGN_INVERT_MUTATION,
+        AMP_MUTATION;
+    }
 
 }

@@ -1,30 +1,47 @@
 package tarea3;
 
-public class Engine {
+import java.util.ListIterator;
+
+class Engine {
 
     State state;
 
-    void performActions() {
-
-        Ball ball = state.ball;
+    synchronized void performActions() {
         // Set movement for paddles
-        for (Individual ind : state.population.individuals) {
-            ind.movePaddle(ball);
-            ind.paddles.move();
+        Ball ball = state.ball;
+        for (Individual individual : state.population.individuals) {
+            individual.setNextMove(ball);
+            individual.movePaddle();
         }
         // Move ball
         ball.move();
         ball.checkCollisionTopEdge();
         ball.checkCollisionBottomEdge();
 
+        // Ball in position to get hit by paddles
         if (ball.checkCollisionLeftPaddle() || ball.checkCollisionRightPaddle()) {
-            for (Individual ind : state.population.individuals) {
-                ind.checkIfHitBall(ball);
-                if (ind.lives == 0) {
-                    state.individualDied(ind);
+            // Check which individuals hit the ball
+            boolean atLeast1Hit = false;
+            ListIterator<Individual> iterator = state.current_individuals.listIterator();
+            while (iterator.hasNext()) {
+                Individual individual = iterator.next();
+                if (individual.checkIfHitBall(ball)) {
+                    state.individualHitBall(individual);
+                    atLeast1Hit = true;
+                } else {
+                    state.individualMissedBall(iterator, individual);
                 }
             }
+            if (atLeast1Hit) {
+                state.ballHitSomePaddle();
+                ball.changeXDirection();
+            } else {
+                state.allPaddlesMissedBall();
+            }
+        }
 
+        if (ball.checkCollisionLeftEdge() || ball.checkCollisionRightEdge()) {
+            state.ballHitBorder();
         }
 
     }
