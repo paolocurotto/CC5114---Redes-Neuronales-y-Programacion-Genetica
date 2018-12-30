@@ -21,7 +21,7 @@ public class Population {
     }
 
     private void calculateFitness(Individual individual) {
-        individual.fitness = individual.hits - 0.1 * individual.mov_used;
+        individual.fitness = individual.hits + 0.0001 * individual.time_idle;
     }
 
     /** Genetic algorithm **/
@@ -30,7 +30,8 @@ public class Population {
         individuals.forEach(this::calculateFitness);
         individuals.sort((a, b) -> (b.fitness - a.fitness > 0) ? 1 : (b.fitness < a.fitness) ? -1 : 0);
         System.out.println("Generation: " + ++generationCounter + ", best fit: " + individuals.get(0).fitness +
-                " | mov used: " + individuals.get(0).mov_used);
+                " | mov used: " + individuals.get(0).mov_used + ", idle: " + individuals.get(0).time_idle
+                + "| idle worst: " + individuals.get(individuals.size() - 1).time_idle);
 
         // Tournament selection
         for (int n = 0; n < POPULATION_SIZE; n++) {

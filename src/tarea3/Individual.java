@@ -22,6 +22,8 @@ public class Individual {
     int n_amp_mutations = 0;
     int hits = 0;
     int mov_used = 0;
+    int idle_counter = 0;
+    int time_idle = 0;
 
     // Initialize individual with random genes
     Individual() {
@@ -29,7 +31,7 @@ public class Individual {
         int r = ThreadLocalRandom.current().nextInt(0, 256);
         int b = ThreadLocalRandom.current().nextInt(0, 256);
         color = new Color(255, 255, 255);
-        neuralNetwork = new NeuralNetwork(new int[]{5, 10, 3});
+        neuralNetwork = new NeuralNetwork(new int[]{5, 20, 3});
         x1 = PADDLE_A_INITIAL_X_POS;
         x2 = PADDLE_B_INITIAL_X_POS;
         y = PADDLE_INITIAL_Y_POS;
@@ -57,8 +59,7 @@ public class Individual {
         aux[2] = info[2];
         aux[3] = info[3];
         aux[4] = info[4];
-        //List<Double> outputs = Arrays.stream(info).boxed().collect(Collectors.toList());
-        //double vy = outputs.get(4);
+
         // Normalize
         double max_vy = BALL_SPEED * Math.sin(1.4);
         double min_vy = -max_vy;
@@ -80,8 +81,10 @@ public class Individual {
         }
         int index = neuralNetwork.evaluate_index(info);
         int action = PLAYER_ACTION.get(index);
-        if (action != y_direction) {
-            mov_used++;
+        if (action == PADDLE_IDLE) {
+            idle_counter++;
+            time_idle++;
+            //if (idle_counter > )
         }
         y_direction = action;
     }
@@ -96,7 +99,4 @@ public class Individual {
         }
     }
 
-    void calculateFitness() {
-        fitness = hits - 0.1*mov_used;
-    }
 }

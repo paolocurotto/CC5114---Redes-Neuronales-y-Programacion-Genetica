@@ -63,12 +63,12 @@ public class SigmoidNeuron {
         Mutation m = NO_MUTATION;
         for (double w : this.weights) {
             double r = Math.random();
-            if (r < 0.005) {
+            if (r < 0.003) {
                 w = -w;
                 m = SIGN_INVERT_MUTATION;
             }
             if (r > 0.99) {
-                w = w * 1.2;
+                w = w * 1.1;
                 m = AMP_MUTATION;
             }
             s.weights.add(w);

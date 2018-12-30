@@ -8,12 +8,12 @@ public class Globals {
     // Game
     static final int PERIOD = 5;
     static final int DELAY = 500;
-    static final int PLAYTIME = 20;
-    static final int PLAYBALLS = 10;
-    static final int LIVES = 10;
+    static final int PLAYTIME = 6;
+    static final int PLAYBALLS = 6;
+    static final int LIVES = 6;
 
     // Genetic algorithm
-    static final int POPULATION_SIZE = 50;
+    static final int POPULATION_SIZE = 200;
     static final int K_FACTOR = POPULATION_SIZE;
 
     // Window
@@ -53,7 +53,7 @@ public class Globals {
     public enum Mutation {
         NO_MUTATION,
         SIGN_INVERT_MUTATION,
-        AMP_MUTATION;
+        AMP_MUTATION,
     }
 
 }

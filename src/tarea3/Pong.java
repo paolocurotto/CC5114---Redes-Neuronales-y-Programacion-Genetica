@@ -58,11 +58,18 @@ public class Pong extends JPanel {
             g2d.fillRect(individual.x2, individual.y, PADDLE_WIDTH, PADDLE_HEIGHT);
 
             g2d.setColor(Color.BLUE);
-            g2d.fillRect(individual.x1, individual.y , PADDLE_WIDTH, 1*individual.n_sign_mutations);
-            g2d.fillRect(individual.x2, individual.y , PADDLE_WIDTH, 1*individual.n_sign_mutations);
+            int a = individual.n_sign_mutations / PADDLE_WIDTH;
+            g2d.fillRect(individual.x1, individual.y , PADDLE_WIDTH, a);
+            g2d.fillRect(individual.x2, individual.y , PADDLE_WIDTH, a);
+            g2d.fillRect(individual.x1, individual.y + a + 1 , individual.n_sign_mutations % PADDLE_WIDTH, 1);
+            g2d.fillRect(individual.x2, individual.y + a + 1 , individual.n_sign_mutations % PADDLE_WIDTH, 1);
+
             g2d.setColor(Color.RED);
-            g2d.fillRect(individual.x1, individual.y + PADDLE_HEIGHT - 1*individual.n_amp_mutations, PADDLE_WIDTH, 1*individual.n_amp_mutations);
-            g2d.fillRect(individual.x2, individual.y + PADDLE_HEIGHT - 1*individual.n_amp_mutations, PADDLE_WIDTH, 1*individual.n_amp_mutations);
+            a = individual.n_amp_mutations / PADDLE_WIDTH;
+            g2d.fillRect(individual.x1, individual.y + PADDLE_HEIGHT - a, PADDLE_WIDTH, a);
+            g2d.fillRect(individual.x2, individual.y + PADDLE_HEIGHT - a, PADDLE_WIDTH, a);
+            g2d.fillRect(individual.x1, individual.y + PADDLE_HEIGHT - a - 1, individual.n_amp_mutations % PADDLE_WIDTH, 1);
+            g2d.fillRect(individual.x2, individual.y + PADDLE_HEIGHT - a - 1, individual.n_amp_mutations % PADDLE_WIDTH, 1);
 
         }
         g2d.setColor(c1);
