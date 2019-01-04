@@ -6,15 +6,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import static tarea3.Globals.*;
 
 public class Ball {
-
     Color color = Color.WHITE;
     int x;
     int y;
     double real_x;
     double real_y;
-    double angle_p = 1;
-    double vx = BALL_SPEED * Math.cos(angle_p);
-    double vy = BALL_SPEED * Math.sin(angle_p);
+    double vx = BALL_SPEED * Math.cos(1);
+    double vy = BALL_SPEED * Math.sin(1);
     boolean active = true;
 
     Ball() {
@@ -47,11 +45,11 @@ public class Ball {
         }
     }
 
-    boolean checkCollisionLeftPaddle() {
+    boolean checkPositionToGetHitLeft() {
         return active && (x < BALL_PADDLE_A_HIT_THRESHOLD);
     }
 
-    boolean checkCollisionRightPaddle() {
+    boolean checkPositionToGetHitRight() {
         return active && (x > BALL_PADDLE_B_HIT_THRESHOLD);
     }
 
@@ -66,9 +64,7 @@ public class Ball {
     void resetBall() {
         real_x = BALL_INITIAL_X_POS;
         real_y = BALL_INITIAL_Y_POS;
-        double min_ang = Math.asin(PADDLE_SPEED / BALL_SPEED) + 0.2; //
-        double max_ang = 1.4;
-        double ang = ThreadLocalRandom.current().nextDouble(min_ang, max_ang); // 40 - 70
+        double ang = ThreadLocalRandom.current().nextDouble(BALL_MIN_ANGLE, BALL_MAX_ANGLE);
         vx = BALL_SPEED * Math.cos(ang);
         vy = BALL_SPEED * Math.sin(ang);
         if (Math.random() < 0.5) {
@@ -79,7 +75,4 @@ public class Ball {
         }
     }
 
-    void changeXDirection() {
-        vx = -vx;
-    }
 }

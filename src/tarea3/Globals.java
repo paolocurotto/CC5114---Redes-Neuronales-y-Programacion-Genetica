@@ -4,26 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Globals {
-
     // Game
     static final int PERIOD = 5;
     static final int DELAY = 500;
-    static final int PLAYTIME = 6;
-    static final int PLAYBALLS = 6;
-    static final int LIVES = 6;
+    static final int PLAYTIME = 20;
+    static final int INDIVIDUAL_LIVES = 7 ;
 
     // Genetic algorithm
-    static final int POPULATION_SIZE = 200;
+    static final int POPULATION_SIZE = 500;
     static final int K_FACTOR = POPULATION_SIZE;
 
     // Window
-    static final int WINDOW_WIDTH = 720;
-    static final int WINDOW_HEIGHT = 500;
+    static final int WINDOW_WIDTH = 800;
+    static final int WINDOW_HEIGHT = 600;
 
     // Paddles
     static final int PADDLE_WIDTH = 16;
     static final int PADDLE_HEIGHT = 60;
-    static final double PADDLE_SPEED = 4;
+    static final double PADDLE_SPEED = 3;
     static final int PADDLE_DISTANCE_FROM_EDGE = 7; // % of window width
     static final int PADDLE_A_INITIAL_X_POS = (int) (WINDOW_WIDTH * (PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2;
     static final int PADDLE_B_INITIAL_X_POS = (int) (WINDOW_WIDTH * (1 - PADDLE_DISTANCE_FROM_EDGE / 100.0)) - PADDLE_WIDTH / 2;
@@ -31,6 +29,8 @@ public class Globals {
 
     // Ball
     static final double BALL_SPEED = 6;
+    static final double BALL_MIN_ANGLE = 0.5;
+    static final double BALL_MAX_ANGLE = 1.4;
     static final int BALL_RADIUS = 10;
     static final int BALL_INITIAL_X_POS = WINDOW_WIDTH / 2;
     static final int BALL_INITIAL_Y_POS = WINDOW_HEIGHT / 2;
@@ -41,6 +41,7 @@ public class Globals {
     static final int BALL_LEFT_EDGE_HIT_THRESHOLD = BALL_RADIUS;
     static final int BALL_RIGHT_EDGE_HIT_THRESHOLD = WINDOW_WIDTH - BALL_RADIUS;
 
+    // Paddle movement
     static final int PADDLE_UP = -1;
     static final int PADDLE_IDLE = 0;
     static final int PADDLE_DOWN = 1;
@@ -49,11 +50,4 @@ public class Globals {
         put(1, PADDLE_IDLE);
         put(2, PADDLE_DOWN);
     }};
-
-    public enum Mutation {
-        NO_MUTATION,
-        SIGN_INVERT_MUTATION,
-        AMP_MUTATION,
-    }
-
 }

@@ -3,7 +3,6 @@ package tarea3;
 import neural_network.NeuralNetwork;
 
 import java.awt.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static tarea3.Globals.*;
 
@@ -11,27 +10,21 @@ import static tarea3.Globals.*;
 public class Individual {
     NeuralNetwork neuralNetwork;
     double fitness;
-    int lives = LIVES;
+    int lives = INDIVIDUAL_LIVES;
     Color color;
     int y;
-    double real_y;
+    private double real_y;
     int x1;
     int x2;
-    int y_direction = PADDLE_IDLE;
-    int n_sign_mutations = 0;
-    int n_amp_mutations = 0;
-    int hits = 0;
-    int mov_used = 0;
-    int idle_counter = 0;
+    private int y_direction = PADDLE_IDLE;
+    double hits = 0;
+    double acc_distance = 0;
     int time_idle = 0;
 
     // Initialize individual with random genes
     Individual() {
-        //color = Color.WHITE;
-        int r = ThreadLocalRandom.current().nextInt(0, 256);
-        int b = ThreadLocalRandom.current().nextInt(0, 256);
         color = new Color(255, 255, 255);
-        neuralNetwork = new NeuralNetwork(new int[]{5, 20, 3});
+        neuralNetwork = new NeuralNetwork(new int[]{5, 8, 3});
         x1 = PADDLE_A_INITIAL_X_POS;
         x2 = PADDLE_B_INITIAL_X_POS;
         y = PADDLE_INITIAL_Y_POS;
@@ -46,55 +39,45 @@ public class Individual {
     }
 
     void setNextMove(Ball b) {
+        /*
+        * [0] = Paddle Y position
+        * [1] = Ball X position
+        * [2] = Ball Y position
+        * [3] = Ball X Velocity
+        * [4] = Ball Y Velocity
+        */
         double[] info = new double[5];
-        // [paddle y, ball x, ball y, ball v_x, ball v_y]
-        info[0] = real_y;
-        info[1] = b.real_x;
-        info[2] = b.real_y;
-        info[3] = b.vx;
-        info[4] = b.vy;
-        double[] aux = new double[5];
-        aux[0] = info[0];
-        aux[1] = info[1];
-        aux[2] = info[2];
-        aux[3] = info[3];
-        aux[4] = info[4];
-
         // Normalize
-        double max_vy = BALL_SPEED * Math.sin(1.4);
+        double max_vy = BALL_SPEED * Math.sin(BALL_MAX_ANGLE);
         double min_vy = -max_vy;
-        double max_vx = BALL_SPEED * Math.cos(Math.asin(PADDLE_SPEED / BALL_SPEED) + 0.1);
+        double max_vx = BALL_SPEED * Math.cos(BALL_MIN_ANGLE);
         double min_vx = -max_vx;
-        info[0] = (info[0] - 0) / (WINDOW_HEIGHT - PADDLE_HEIGHT);
-        info[1] = (info[1] - 0) / (WINDOW_WIDTH);
-        info[2] = (info[2] - 0) / (WINDOW_HEIGHT);
-        info[3] = (info[3] - min_vx) / (max_vx - min_vx);
-        info[4] = (info[4] - min_vy) / (max_vy - min_vy);
-
-        for (int i = 0; i < info.length; i++) {
-            double d = info[i];
-            if (d < 0 || d > 1) {
-                if (i != -1) {
-                    System.out.println("Error at " + i + ", d=" + d + ", b4=" + aux[i] + ", ang=");
-                }
-            }
-        }
+        info[0] = (real_y) / (WINDOW_HEIGHT - PADDLE_HEIGHT);
+        info[1] = (b.real_x) / (WINDOW_WIDTH);
+        info[2] = (b.real_y) / (WINDOW_HEIGHT);
+        info[3] = (b.vx - min_vx) / (max_vx - min_vx);
+        info[4] = (b.vy - min_vy) / (max_vy - min_vy);
+        // Action
         int index = neuralNetwork.evaluate_index(info);
         int action = PLAYER_ACTION.get(index);
         if (action == PADDLE_IDLE) {
-            idle_counter++;
             time_idle++;
-            //if (idle_counter > )
         }
         y_direction = action;
     }
 
     boolean checkIfHitBall(Ball ball) {
         int by = ball.y;
-        if (y < by + BALL_RADIUS && by - BALL_RADIUS < y + PADDLE_HEIGHT) {
+        // Individual hit ball
+        if (y <= by + BALL_RADIUS && by - BALL_RADIUS <= y + PADDLE_HEIGHT) {
+            hits++;
             return true;
         }
+        // Missed ball
         else {
+            double distanceToBall = Math.max(y - (by + BALL_RADIUS), (by - BALL_RADIUS) - (y + PADDLE_HEIGHT));
+            double norm_distance = 1 - (distanceToBall / WINDOW_HEIGHT);
+            acc_distance = acc_distance + norm_distance;
             return false;
         }
     }

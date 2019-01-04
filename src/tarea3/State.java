@@ -7,15 +7,12 @@ import java.util.ListIterator;
 import static tarea3.Globals.*;
 
 public class State {
-
-    int playballs;
     int playtime;
     Ball ball;
     List<Individual> current_individuals;
-    Population population;
+    private Population population;
 
     State() {
-        playballs = PLAYBALLS;
         playtime = PLAYTIME;
         current_individuals = new ArrayList<>();
         ball = new Ball();
@@ -23,43 +20,77 @@ public class State {
         current_individuals.addAll(population.individuals);
     }
 
-    void ballHitSomePaddle() {
-        //ball.active = false;
+    synchronized void performActions() {
+        // Move paddles
+        for (Individual individual : population.individuals) {
+            individual.setNextMove(ball); // -> Neural network
+            individual.movePaddle();
+        }
+        // Move ball
+        ball.move();
+        ball.checkCollisionTopEdge();
+        ball.checkCollisionBottomEdge();
+
+        // Ball in position to get hit by paddles
+        if (ball.checkPositionToGetHitLeft() || ball.checkPositionToGetHitRight()) {
+            // Check which individuals hit the ball
+            boolean atLeast1Hit = false;
+            ListIterator<Individual> iterator = current_individuals.listIterator();
+            while (iterator.hasNext()) {
+                Individual individual = iterator.next();
+                if (individual.checkIfHitBall(ball)) {
+                    atLeast1Hit = true;
+                } else {
+                    individualMissedBall(iterator, individual);
+                }
+            }
+            if (atLeast1Hit) {
+                ballHitSomePaddle();
+                changeBallXDirection();
+            } else {
+                allPaddlesMissedBall();
+            }
+        }
+        // Ball reached left or right edge
+        if (ball.checkCollisionLeftEdge() || ball.checkCollisionRightEdge()) {
+            ballHitBorder();
+        }
+    }
+
+    private void ballHitSomePaddle() {
         playtime--;
         if (playtime == 0) {
             resetGame();
         }
     }
 
-    void allPaddlesMissedBall() {
+    private void allPaddlesMissedBall() {
         ball.active = false;
-
     }
 
-    void ballHitBorder() {
+    private void ballHitBorder() {
         ball.active = true;
-        playballs--;
         ball.resetBall();
-        if (playballs == 0 || current_individuals.size() == 0) {
+        if (current_individuals.size() == 0) {
             resetGame();
         }
     }
 
-    void individualHitBall(Individual individual) {
-        individual.hits++;
-    }
-
-    synchronized void individualMissedBall(ListIterator<Individual> iterator, Individual individual) {
+    private synchronized void individualMissedBall(ListIterator<Individual> iterator, Individual individual) {
         individual.lives--;
         if (individual.lives == 0) {
             iterator.remove();
         }
     }
 
+    private void changeBallXDirection() {
+        ball.vx = -ball.vx;
+    }
+
     synchronized private void resetGame() {
-        playballs = PLAYBALLS;
         playtime = PLAYTIME;
         ball.resetBall();
+        // Genetic algorithm
         population.startNewGeneration();
         current_individuals.clear();
         current_individuals.addAll(population.individuals);
