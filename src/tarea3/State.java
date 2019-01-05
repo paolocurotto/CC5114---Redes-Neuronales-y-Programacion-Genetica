@@ -11,6 +11,7 @@ public class State {
     Ball ball;
     List<Individual> current_individuals;
     private Population population;
+    int generation = 0;
 
     State() {
         playtime = PLAYTIME;
@@ -94,5 +95,6 @@ public class State {
         population.startNewGeneration();
         current_individuals.clear();
         current_individuals.addAll(population.individuals);
+        generation++;
     }
 }

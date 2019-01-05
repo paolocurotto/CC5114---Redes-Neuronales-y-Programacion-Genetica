@@ -23,8 +23,9 @@ public class Individual {
 
     // Initialize individual with random genes
     Individual() {
-        color = new Color(255, 255, 255);
-        neuralNetwork = new NeuralNetwork(new int[]{5, 8, 3});
+        int r = 50;
+        color = new Color(r, r, r);
+        neuralNetwork = new NeuralNetwork(new int[]{5, 12, 3});
         x1 = PADDLE_A_INITIAL_X_POS;
         x2 = PADDLE_B_INITIAL_X_POS;
         y = PADDLE_INITIAL_Y_POS;

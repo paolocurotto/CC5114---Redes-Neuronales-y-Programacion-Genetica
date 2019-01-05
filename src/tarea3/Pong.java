@@ -15,7 +15,7 @@ public class Pong extends JPanel {
         state = new State();
         setFocusable(true);
         setDoubleBuffered(true);
-        new Timer().scheduleAtFixedRate(new TimerTask() {public void run() { tick(); }}, DELAY, PERIOD);
+        new Timer().scheduleAtFixedRate(new TimerTask() {public void run() { tick(); }}, START_DELAY, PERIOD);
     }
 
     private synchronized void tick() {
@@ -36,12 +36,16 @@ public class Pong extends JPanel {
     }
 
     private void drawBackground(Graphics2D g2d) {
-        setBackground(new Color(20, 130, 44));
+        //setBackground(new Color(20, 130, 45));
+        setBackground(new Color(20, 20, 20));
         g2d.setColor(Color.white);
         Composite c = g2d.getComposite();
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .3f));
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
         g2d.setFont(new Font("Georgia", Font.BOLD, 80));
         g2d.drawString(state.playtime + "", WINDOW_WIDTH/2 -20, 100);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
+        g2d.setFont(new Font("Georgia", Font.BOLD, 20));
+        g2d.drawString("Generation: " + state.generation, (int) (WINDOW_WIDTH/2 -30), 30);
         g2d.setComposite(c);
     }
 
@@ -52,12 +56,6 @@ public class Pong extends JPanel {
             g2d.setColor(individual.color);
             g2d.fillRect(individual.x1, individual.y, PADDLE_WIDTH, PADDLE_HEIGHT);
             g2d.fillRect(individual.x2, individual.y, PADDLE_WIDTH, PADDLE_HEIGHT);
-            g2d.setColor(Color.BLUE);
-            g2d.fillRect(individual.x1, individual.y , PADDLE_WIDTH, 1);
-            g2d.fillRect(individual.x2, individual.y , PADDLE_WIDTH, 1);
-            g2d.setColor(Color.RED);
-            g2d.fillRect(individual.x1, individual.y + PADDLE_HEIGHT - 1, PADDLE_WIDTH, 1);
-            g2d.fillRect(individual.x2, individual.y + PADDLE_HEIGHT - 1, PADDLE_WIDTH, 1);
         }
         g2d.setColor(c1);
     }

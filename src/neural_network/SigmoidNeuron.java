@@ -56,19 +56,19 @@ public class SigmoidNeuron {
         SigmoidNeuron s = new SigmoidNeuron();
         for (double w : this.weights) {
             double r = Math.random();
-            if (r < 0.01) {
+            if (r < 0.001) {
                 w = -w;
             }
-            if (r > 0.9) {
+            if (r > 0.99) {
                 w = w * 1.1;
             }
             s.weights.add(w);
         }
         double t = this.threshold;
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.01) {
             t = t * 1.1;
         }
-        if (Math.random() < 0.01) {
+        if (Math.random() < 0.001) {
             t = -t;
         }
         s.threshold = t;
