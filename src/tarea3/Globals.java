@@ -5,7 +5,7 @@ import java.util.Map;
 
 class Globals {
     // Game
-    static final int PERIOD = 1;
+    static final int PERIOD = 5;
     static final int START_DELAY = 500;
     static final int PLAYTIME = 20;
     static final int INDIVIDUAL_LIVES = 7 ;
